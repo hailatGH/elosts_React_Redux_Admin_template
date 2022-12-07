@@ -171,6 +171,7 @@ export default function GenreTable(props) {
         rowExpandable: (record) => record.name !== "Not Expandable",
       }}
       pagination={{
+        hideOnSinglePage: true,
         defaultCurrent: 1,
         total: props.genersCount,
         onChange: props.onPageNumberChange,

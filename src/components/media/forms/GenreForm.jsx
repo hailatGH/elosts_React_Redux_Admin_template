@@ -8,7 +8,7 @@ export default function GenreForm(props) {
   const dispatch = useDispatch();
   const [addRequestStatus, setAddRequestStatus] = useState("idle");
   const { TextArea } = Input;
-  const [imageSet, setImageSet] = useState();
+  const [imageSet, setImageSet] = useState(false);
   const [imageUrl, setImageUrl] = useState();
 
   const [inputData, setInputData] = useState(() => {
@@ -56,6 +56,17 @@ export default function GenreForm(props) {
       props.closeModal();
       cleanUp();
     }
+  }
+
+  function handleImageUpload(event) {
+    setImageUrl(URL.createObjectURL(event.target.files[0]));
+    setInputData((prevInputData) => {
+      return {
+        ...prevInputData,
+        genre_coverImage: event.target.files[0],
+      };
+    });
+    setImageSet(true);
   }
 
   return (
@@ -126,7 +137,6 @@ export default function GenreForm(props) {
               height={100}
               src={imageUrl}
               preview={false}
-              onClick={() => setImageSet(false)}
               style={{ borderRadius: "4px" }}
             />
           ) : (
@@ -151,14 +161,7 @@ export default function GenreForm(props) {
           id="imgFiles"
           style={{ visibility: "hidden" }}
           type="file"
-          onChange={(event) => {
-            setImageSet(true);
-            setImageUrl(URL.createObjectURL(event.target.files[0]));
-            setInputData((prevInputData) => ({
-              ...prevInputData,
-              genre_coverImage: event.target.files[0],
-            }));
-          }}
+          onChange={(event) => handleImageUpload(event)}
         />
       </div>
 
