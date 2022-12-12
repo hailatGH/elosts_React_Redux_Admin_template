@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 // Data
-import { UIData } from "./data/UIData";
+import { SidebarData } from "./data/UIData";
 
 // Antd Componensts Import
 import { Popover, Badge, Divider } from "antd";
@@ -39,6 +39,9 @@ import {
   Error,
 } from "./pages";
 
+// Custom Components
+import { Sidebar } from "./components";
+
 export default function App() {
   const [open, setOpen] = useState(false);
   const hide = () => {
@@ -69,51 +72,11 @@ export default function App() {
 
   return (
     <div className="App">
-      <div className="sidebar">
-        <div className="logo-details">
-          <i className="bx bx-album"></i>
-          <span className="logo_name">ZEMA</span>
-          <i onClick={toggleSideBar} className="bx bxs-x-square"></i>
-        </div>
-        {
-          <ul className="nav-links">
-            {UIData.map((data) => (
-              <li key={data.key}>
-                <div className="iocn-link">
-                  <NavLink to={data.link_route}>
-                    {data.link_icon}
-                    <span className="link_name">{data.link_name}</span>
-                  </NavLink>
-                  {data.has_subMenu ? (
-                    <i
-                      onClick={() => toggleSubMenu(event)}
-                      className="bx bxs-chevron-right arrow"
-                    ></i>
-                  ) : (
-                    ""
-                  )}
-                </div>
-                <ul className={`sub-menu ${data.has_subMenu ? "" : "blank"}`}>
-                  <li>
-                    <NavLink to={data.link_route} className="link_name">
-                      {data.link_name}
-                    </NavLink>
-                  </li>
-                  {data.has_subMenu
-                    ? data.subMenu.map((subData) => (
-                        <li key={subData.key}>
-                          <NavLink to={subData.subMenu_link_route}>
-                            {subData.subMenu_link_name}
-                          </NavLink>
-                        </li>
-                      ))
-                    : ""}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        }
-      </div>
+      <Sidebar
+        toggleSideBar={toggleSideBar}
+        toggleSubMenu={toggleSubMenu}
+        sidebarData={SidebarData}
+      />
       <section className="home-section">
         <div className="home-content">
           <div className="navbar">

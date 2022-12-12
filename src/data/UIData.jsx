@@ -1,6 +1,6 @@
 import { Rate } from "antd";
 
-export const UIData = [
+export const SidebarData = [
   {
     key: 1,
     link_name: "Dashboard",
