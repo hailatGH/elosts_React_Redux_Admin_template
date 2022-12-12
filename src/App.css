@@ -1,9 +1,9 @@
-@import url("./styles/sidebar.css");
-@import url("./styles/navbar.css");
-@import url("./styles/analytics_card.css");
-@import url("./styles/home.css");
-@import url("./styles/dashboard.css");
-@import url("./styles/musics.css");
+@import url("./style/sidebar.css");
+@import url("./style/navbar.css");
+@import url("./style/analytics_card.css");
+@import url("./style/home.css");
+@import url("./style/dashboard.css");
+@import url("./style/musics.css");
 
 * {
   margin: 0;
@@ -13,6 +13,9 @@
 }
 body {
   background: #f1f3f6;
+}
+body::-webkit-scrollbar {
+  display: none;
 }
 .app {
   overflow: hidden;
@@ -29,7 +32,4 @@ body {
   font-weight: 600;
   margin: 10px 0px;
   padding: 5px;
-}
-
-@media screen and (max-width: 900px) {
 }

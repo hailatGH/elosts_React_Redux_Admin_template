@@ -1,6 +1,6 @@
 .home-section {
   position: relative;
-  height: 100vh;
+  height: calc(100vh - 60px);
   left: 230px;
   width: calc(100% - 230px);
   transition: all 0.5s ease;
@@ -26,9 +26,9 @@
   padding-bottom: 100px;
   overflow-y: scroll;
 }
-.home-section .home-content .home::-webkit-scrollbar {
+/* .home-section .home-content .home::-webkit-scrollbar {
   display: none;
-}
+} */
 /* .home-section .home-content .home .content {
   display: grid;
     grid-gap: 10px;
