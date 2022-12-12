@@ -1,0 +1,18 @@
+.music_summery {
+  display: flex;
+  justify-content: space-between;
+}
+.bx.bxs-check-circle {
+  color: green;
+  font-size: 20px;
+}
+.bx.bxs-x-circle {
+  color: red;
+  font-size: 20px;
+}
+.music_summery_rightside {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(200px, 1fr));
+  grid-template-rows: repeat(2, minmax(200px, 1fr));
+  grid-gap: 10px;
+}

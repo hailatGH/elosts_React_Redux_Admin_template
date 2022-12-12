@@ -22,6 +22,7 @@ export { default as Dashboard } from "./other/Dashboard";
 export { default as Analytics } from "./other/Analytics";
 export { default as Playlists } from "./other/Playlists";
 export { default as Users } from "./other/Users";
+export { default as Settings } from "./other/Settings";
 export { default as Profile } from "./other/Profile";
 export { default as Help } from "./other/Help";
 export { default as Logout } from "./other/Logout";

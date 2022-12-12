@@ -1,0 +1,41 @@
+.analytic_cards {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-rows: repeat(auto-fit, minmax(50px, 1fr));
+  margin-bottom: 10px;
+}
+.card {
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  height: 80px;
+}
+.card .card-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2px 0px 0px 2px;
+  width: 60%;
+  height: 100%;
+  font-size: 30px;
+}
+.card .card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 20px;
+  height: 100%;
+  width: 100%;
+  border-radius: 0px 2px 2px 0px;
+}
+.card .card-content .card-name {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+.card .card-content .card-count {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 18px;
+}

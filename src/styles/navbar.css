@@ -1,0 +1,85 @@
+.navbar {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  background: #fff;
+  z-index: 100;
+  top: 0;
+  right: 0;
+}
+.navbar .bx-menu {
+  font-size: 22px;
+  cursor: pointer;
+  margin: 0px 10px 0px 20px;
+  color: #2d3545;
+  border: 1px solid #2d3545;
+  padding: 5px;
+  border-radius: 3px;
+}
+.navbar .profile-details {
+  display: flex;
+  align-items: center;
+}
+.navbar .profile-details img {
+  height: 52px;
+  width: 52px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #ebebeb;
+  margin-left: 12px;
+  transition: all 0.5s ease;
+}
+
+.navbar .profile-details {
+  margin-right: 5px;
+  border-radius: 10px;
+  padding: 2px 5px;
+  cursor: pointer;
+}
+.navbar .profile-details:hover {
+  background: #ebebeb;
+}
+.navbar .profile-details .profile-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.navbar .profile-details .profile-content .dot {
+  position: fixed;
+  height: 13px;
+  width: 13px;
+  background-color: greenyellow;
+  border-radius: 50%;
+  z-index: 1000;
+  margin-top: 25px;
+  margin-right: -2px;
+}
+.navbar .profile-details .profile_name,
+.navbar .profile-details .job {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.navbar .profile-details .job {
+  font-size: 9px;
+  font-weight: 400;
+}
+
+@media screen and (max-width: 900px) {
+  .navbar .bx-menu {
+    margin: 0px 0px 0px 10px;
+  }
+  .navbar .profile-details img {
+    margin-left: 0px;
+  }
+  .navbar .profile-details .name-job {
+    display: none;
+  }
+}

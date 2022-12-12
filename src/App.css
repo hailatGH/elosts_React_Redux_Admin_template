@@ -1,0 +1,35 @@
+@import url("./styles/sidebar.css");
+@import url("./styles/navbar.css");
+@import url("./styles/analytics_card.css");
+@import url("./styles/home.css");
+@import url("./styles/dashboard.css");
+@import url("./styles/musics.css");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+body {
+  background: #f1f3f6;
+}
+.app {
+  overflow: hidden;
+}
+.optionscard {
+  padding: 5px;
+  width: 250px;
+}
+.page_card {
+  border-radius: 2px;
+}
+.breadCrumb {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 10px 0px;
+  padding: 5px;
+}
+
+@media screen and (max-width: 900px) {
+}
