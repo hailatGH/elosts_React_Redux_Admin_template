@@ -5,11 +5,11 @@ import "./App.css";
 import { Sidebar, Navbar, CustomRoutes } from "./components";
 
 // Context imports
-import { ThemeProvider } from "./contexts/ThemeContext";
+import { SidebarStateProvider } from "./contexts/UIContexts";
 
 export default function App() {
   return (
-    <ThemeProvider>
+    <SidebarStateProvider>
       <div className="App">
         <Sidebar />
         <section className="home-section">
@@ -21,6 +21,6 @@ export default function App() {
           </div>
         </section>
       </div>
-    </ThemeProvider>
+    </SidebarStateProvider>
   );
 }

@@ -4,7 +4,16 @@ import { NavLink } from "react-router-dom";
 // Data
 import { SidebarData } from "../../data/UIData";
 
+// Cusotm hook import
+import {
+  useSidebarState,
+  useSidebarStateUpdate,
+} from "../../contexts/UIContexts";
+
 export default function Sidebar() {
+  const sidebar = useSidebarState();
+  const toggleSidebar = useSidebarStateUpdate();
+
   // Toggle submenu
   const toggleSubMenu = (event) => {
     let activeNode = event.target.parentElement.parentElement;
@@ -23,16 +32,11 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="sidebar">
+    <div className={sidebar ? "sidebar" : "sidebar close"}>
       <div className="logo-details">
         <i className="bx bx-album"></i>
         <span className="logo_name">ZEMA</span>
-        <i
-          onClick={() =>
-            document.querySelector(".sidebar").classList.toggle("close")
-          }
-          className="bx bxs-x-square"
-        ></i>
+        <i onClick={toggleSidebar} className="bx bxs-x-square"></i>
       </div>
       {
         <ul className="nav-links">

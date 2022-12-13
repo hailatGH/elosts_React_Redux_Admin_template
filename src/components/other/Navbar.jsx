@@ -1,18 +1,26 @@
+// React imports
 import { useState } from "react";
+
+// Antd imports
 import { Popover, Badge, Divider } from "antd";
+
+// Router imports
 import { NavLink } from "react-router-dom";
+
+// Cusotm hook import
+import {
+  useSidebarState,
+  useSidebarStateUpdate,
+} from "../../contexts/UIContexts";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const sidebar = useSidebarState();
+  const toggleSidebar = useSidebarStateUpdate();
 
   return (
     <div className="navbar">
-      <i
-        onClick={() =>
-          document.querySelector(".sidebar").classList.toggle("close")
-        }
-        className="bx bx-menu"
-      ></i>
+      <i onClick={toggleSidebar} className="bx bx-menu"></i>
       <Popover
         content={
           <div className="optionscard">
