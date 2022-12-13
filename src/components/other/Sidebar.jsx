@@ -1,17 +1,42 @@
 // Router Import
 import { NavLink } from "react-router-dom";
 
-export default function Sidebar(props) {
+// Data
+import { SidebarData } from "../../data/UIData";
+
+export default function Sidebar() {
+  // Toggle submenu
+  const toggleSubMenu = (event) => {
+    let activeNode = event.target.parentElement.parentElement;
+    let nodes =
+      event.target.parentElement.parentElement.parentElement.childNodes;
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i].nodeName.toLowerCase() == "li") {
+        if (nodes[i] !== activeNode) {
+          if (nodes[i].classList == "showMenu") {
+            nodes[i].classList.remove("showMenu");
+          }
+        }
+      }
+    }
+    activeNode.classList.toggle("showMenu");
+  };
+
   return (
     <div className="sidebar">
       <div className="logo-details">
         <i className="bx bx-album"></i>
         <span className="logo_name">ZEMA</span>
-        <i onClick={props.toggleSideBar} className="bx bxs-x-square"></i>
+        <i
+          onClick={() =>
+            document.querySelector(".sidebar").classList.toggle("close")
+          }
+          className="bx bxs-x-square"
+        ></i>
       </div>
       {
         <ul className="nav-links">
-          {props.sidebarData.map((data) => (
+          {SidebarData.map((data) => (
             <li key={data.key}>
               <div className="iocn-link">
                 <NavLink to={data.link_route}>
@@ -20,7 +45,7 @@ export default function Sidebar(props) {
                 </NavLink>
                 {data.has_subMenu ? (
                   <i
-                    onClick={() => props.toggleSubMenu(event)}
+                    onClick={() => toggleSubMenu(event)}
                     className="bx bxs-chevron-right arrow"
                   ></i>
                 ) : (
