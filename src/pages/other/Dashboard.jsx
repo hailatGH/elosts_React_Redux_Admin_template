@@ -1,3 +1,13 @@
+import { useTheme, useThemeUpdate } from "../../contexts/ThemeContext";
+
 export default function Dashboard() {
-  return <h1>Dashboard</h1>;
+  const darkTheme = useTheme();
+  const toggleTheme = useThemeUpdate();
+
+  return (
+    <>
+      <button onClick={toggleTheme}>Toggle</button>
+      <h1>{darkTheme ? "yes" : "no"}</h1>
+    </>
+  );
 }
