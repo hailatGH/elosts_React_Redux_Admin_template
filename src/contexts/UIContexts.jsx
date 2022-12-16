@@ -26,4 +26,5 @@ export function SidebarStateProvider({ children }) {
     </SideBarStateContext.Provider>
   );
 }
+
 // Sidebar contexts end
