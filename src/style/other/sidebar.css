@@ -1,3 +1,4 @@
+/* Sidebar START */
 .sidebar {
   position: fixed;
   top: 0;
@@ -157,7 +158,6 @@
   opacity: 0;
   pointer-events: none;
 }
-
 @media screen and (max-width: 900px) {
   .sidebar {
     left: -230px;
@@ -222,3 +222,4 @@
     display: block;
   }
 }
+/* Sidebar END */

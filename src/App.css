@@ -1,10 +1,8 @@
-@import url("./style/sidebar.css");
-@import url("./style/navbar.css");
-@import url("./style/analytics_card.css");
-@import url("./style/home.css");
-@import url("./style/dashboard.css");
-@import url("./style/musics.css");
+@import url("./style/other/sidebar.css");
+@import url("./style/other/home.css");
+@import url("./style/other/navbar.css");
 
+/* App START */
 * {
   margin: 0;
   padding: 0;
@@ -20,16 +18,31 @@ body::-webkit-scrollbar {
 .app {
   overflow: hidden;
 }
-.optionscard {
-  padding: 5px;
-  width: 250px;
+.home-section {
+  position: relative;
+  height: calc(100vh - 60px);
+  left: 230px;
+  width: calc(100% - 230px);
+  transition: all 0.5s ease;
+  margin: 0;
 }
-.page_card {
-  border-radius: 2px;
+.sidebar.close ~ .home-section {
+  left: 78px;
+  width: calc(100% - 78px);
 }
-.breadCrumb {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 10px 0px;
-  padding: 5px;
+.home-content {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
+@media screen and (max-width: 900px) {
+  .home-section {
+    left: 0px;
+    width: 100%;
+  }
+  .sidebar.close ~ .home-section {
+    left: 0px;
+    width: 100%;
+  }
+}
+/* App END */

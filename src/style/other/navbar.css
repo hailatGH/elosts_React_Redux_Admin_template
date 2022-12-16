@@ -1,3 +1,4 @@
+/* Navbar START */
 .navbar {
   position: absolute;
   display: flex;
@@ -72,6 +73,11 @@
   font-weight: 400;
 }
 
+.optionscard {
+  padding: 5px;
+  width: 250px;
+}
+
 @media screen and (max-width: 900px) {
   .navbar .bx-menu {
     margin: 0px 0px 0px 10px;
@@ -83,3 +89,4 @@
     display: none;
   }
 }
+/* Navbar END */

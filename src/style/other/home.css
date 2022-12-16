@@ -1,0 +1,12 @@
+/* Home START*/
+.home-section .home-content .home {
+  position: absolute;
+  padding: 10px;
+  right: 0;
+  margin-top: 60px;
+  height: 100%;
+  width: 100%;
+  padding-bottom: 100px;
+  overflow-y: scroll;
+}
+/* Home END */
