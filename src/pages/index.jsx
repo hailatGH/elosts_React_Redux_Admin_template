@@ -18,7 +18,7 @@ export { default as RadioHosts } from "./radio/RadioHosts";
 export { default as Stations } from "./radio/Stations";
 
 // Others
-export { default as Dashboard } from "./other/Dashboard";
+export { default as Dashboard } from "./other/dashboard/Dashboard";
 export { default as Analytics } from "./other/Analytics";
 export { default as Playlists } from "./other/Playlists";
 export { default as Users } from "./other/Users";
