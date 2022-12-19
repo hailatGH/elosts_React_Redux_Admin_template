@@ -1,11 +1,6 @@
 import { Breadcrumb, Card } from "antd";
 import { NavLink } from "react-router-dom";
-import {
-  UserSummary,
-  MusicSummary,
-  PodcastSummary,
-  RadioSummary,
-} from "./components";
+import { UserSummary, MediaSummary } from "./components";
 
 export default function Dashboard() {
   return (
@@ -19,9 +14,7 @@ export default function Dashboard() {
       </div>
       <div className="summary">
         <UserSummary />
-        <MusicSummary />
-        <PodcastSummary />
-        <RadioSummary />
+        <MediaSummary />
       </div>
     </div>
   );

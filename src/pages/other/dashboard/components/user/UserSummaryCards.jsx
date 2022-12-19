@@ -1,4 +1,4 @@
-import { AnalyticsCard } from "../components";
+import { AnalyticsCard } from "../../components";
 
 export default function UserSummayCards() {
   return (

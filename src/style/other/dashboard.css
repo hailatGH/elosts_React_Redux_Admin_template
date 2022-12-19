@@ -49,9 +49,7 @@
   margin-right: 10px;
 }
 .user,
-.music,
-.podcast,
-.radio {
+.media {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
@@ -60,12 +58,8 @@
 .user {
   grid-template-columns: 40% 60%;
 }
-.podcast {
-  grid-template-columns: 60% 40%;
-}
-.music,
-.radio {
-  grid-template-columns: 40% 60%;
+.media {
+  grid-template-columns: 40% 1fr;
 }
 .page_card {
   width: 100%;
@@ -76,9 +70,7 @@
 
 /* User Summary START */
 .user_summary,
-.music_summary,
-.podcast_summary,
-.radio_summary {
+.media_summary {
   margin-top: 10px;
 }
 
@@ -88,3 +80,31 @@
   border-radius: 50%;
 }
 /* User Summary END */
+
+/* Media Summary START */
+.chart_description {
+  width: 100%;
+  margin: 100px 0px 20px 0px;
+  display: flex;
+  justify-content: space-evenly;
+}
+.chart_description .block {
+  display: flex;
+  align-items: center;
+  justify-items: space-between;
+}
+.chart_description .box {
+  width: 15px;
+  height: 15px;
+  margin-right: 10px;
+}
+.chart_description .box.music {
+  background: #008bf6;
+}
+.chart_description .box.podcast {
+  background: #ffba4b;
+}
+.chart_description .box.radio {
+  background: #00c4a2;
+}
+/* Media Summary END */

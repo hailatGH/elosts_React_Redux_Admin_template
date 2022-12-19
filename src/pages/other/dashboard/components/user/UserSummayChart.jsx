@@ -9,10 +9,10 @@ import {
 } from "recharts";
 
 // Cusotm hook import
-import { useSidebarState } from "../../../../contexts/UIContexts";
+import { useSidebarState } from "../../../../../contexts/UIContexts";
 
 // import dummy data
-import { weekData, monthData, yearData } from "./dummyData";
+import { weekData, monthData, yearData } from "./userDummyData";
 
 export default function UserSummayChart(props) {
   const sidebar = useSidebarState();
