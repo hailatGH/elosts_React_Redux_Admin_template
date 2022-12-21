@@ -51,7 +51,7 @@ export default function Artists() {
       />
 
       <div className="table_wraper">
-        <ArtistTable showModal={showModal} />
+        <ArtistTable showModal={showModal} name="Artist" />
       </div>
     </div>
   );

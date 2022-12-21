@@ -18,70 +18,52 @@ export default function ArtistForm() {
   return (
     <Form onFinish={onFinish}>
       <Form.Item
-        name="artistname"
+        name="genrename"
         rules={[
           {
             required: true,
-            message: "Please input Artist Name!",
+            message: "Please input Genre Name!",
           },
         ]}
       >
         <Input
-          placeholder="Artist Name"
+          placeholder="Genre Name"
           style={{ borderRadius: "2px", height: "40px" }}
         />
       </Form.Item>
 
-      <Form.Item name="artisttitle">
-        <Input
-          placeholder="Artist Title"
-          style={{ borderRadius: "2px", height: "40px" }}
-        />
-      </Form.Item>
-
-      <Form.Item name="artistrating" label="Artist Rating">
+      <Form.Item name="genrerating" label="Genre Rating">
         <InputNumber
-          placeholder="Artist Rating"
+          placeholder="Genre Rating"
           style={{ borderRadius: "2px", height: "30px", width: "50%" }}
         />
       </Form.Item>
 
       <Form.Item
-        name="artiststatus"
-        label="Artist Status"
+        name="genrestatus"
+        label="Genre Status"
         valuePropName="checked"
       >
         <Switch defaultChecked={true} />
       </Form.Item>
 
-      <Form.Item name="artistreleasedate">
-        <DatePicker placement="bottomLeft" placeholder="Artist Release Date" />
+      <Form.Item name="genredescription">
+        <TextArea rows={4} placeholder="Genre Description" />
       </Form.Item>
 
-      <Form.Item name="artistdescription">
-        <TextArea rows={4} placeholder="Artist Description" />
-      </Form.Item>
-
-      <Form.Item name="artistfui">
-        <Input
-          placeholder="Artist ID"
-          style={{ borderRadius: "2px", height: "40px" }}
-        />
-      </Form.Item>
-
-      <Form.Item label="Artist Profile Image">
+      <Form.Item label="Genre Cover Image">
         <Form.Item
-          name="artist_profileImage"
+          name="genre_coverImage"
           valuePropName="fileList"
           getValueFromEvent={normFile}
           noStyle
         >
-          <Upload.Dragger name="artist_profileImage">
+          <Upload.Dragger name="file">
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
             </p>
             <p className="ant-upload-text">
-              Click or drag Artist Profile Image <br /> to this area to upload
+              Click or drag Genre Cover Image <br /> to this area to upload
             </p>
           </Upload.Dragger>
         </Form.Item>

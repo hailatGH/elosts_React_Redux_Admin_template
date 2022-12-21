@@ -14,27 +14,15 @@ import Highlighter from "react-highlight-words";
 const data = [
   {
     key: "1",
-    artist_profileImage:
-      "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Artists_Profile_Images/Bisrat_Surafel_Bisrat_Surafel.jpg",
-    artist_name: "Bisrat Surael",
-    artist_status: true,
-    artist_viewcount: 0,
-    artist_rating: 3.5,
-    artist_FUI: "gZkd8CJAxESJpJFmXRLnU0IFkhE3",
+    track_coverImage:
+      "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Tracks_Cover_Images/Lemink%20Nafekegne_Media_Files/Tracks_Cover_Images/Lemink_Nafekegn.jpg",
+    track_name: "Kal Bekal",
+    track_price: 50,
+    track_status: true,
+    track_viewcount: 0,
+    track_rating: 3.5,
     encoder_FUI: "0Yi6yM0YmDWd55AfF0cYea2iXsc2",
-    artist_description: "Ethiopian Artist Bisre",
-  },
-  {
-    key: "2",
-    artist_profileImage:
-      "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Artists_Profile_Images/Abeba_Desalegn_abeba.jpeg",
-    artist_name: "Abeba Desalegn",
-    artist_status: true,
-    artist_viewcount: 0,
-    artist_rating: 4,
-    artist_FUI: "gZkd8CJAxESJpJFmXRLnU0IFkhE3",
-    encoder_FUI: "0Yi6yM0YmDWd55AfF0cYea2iXsc2",
-    artist_description: "Ethiopian Artist Abeba",
+    track_description: "Ethiopian Artist Bisre",
   },
 ];
 
@@ -113,30 +101,36 @@ export default function ArtistTable(props) {
   const columns = [
     {
       title: "Image",
-      dataIndex: "artist_profileImage",
-      key: "artist_profileImage",
+      dataIndex: "track_coverImage",
+      key: "track_coverImage",
       width: "7%",
       fixed: "left",
-      render: (artist_profileImage) => (
-        <img src={artist_profileImage} className="tabe_images" />
+      render: (track_coverImage) => (
+        <img src={track_coverImage} className="tabe_images" />
       ),
     },
     {
-      title: "Artist Name",
-      dataIndex: "artist_name",
-      key: "artist_name",
+      title: "Track Name",
+      dataIndex: "track_name",
+      key: "track_name",
       width: "20%",
-      ...getColumnSearchProps("artist_name"),
-      sorter: (a, b) => a.artist_name.length - b.artist_name.length,
+      ...getColumnSearchProps("track_name"),
+      sorter: (a, b) => a.track_name.length - b.track_name.length,
       sortDirections: ["descend", "ascend"],
     },
     {
+      title: "Price",
+      dataIndex: "track_price",
+      key: "track_price",
+      width: "10%",
+    },
+    {
       title: "Status",
-      dataIndex: "artist_status",
-      key: "artist_status",
+      dataIndex: "track_status",
+      key: "track_status",
       width: "7%",
-      render: (artist_status) =>
-        artist_status ? (
+      render: (track_status) =>
+        track_status ? (
           <i className="bx bxs-check-circle"></i>
         ) : (
           <i className="bx bxs-x-circle"></i>
@@ -144,24 +138,18 @@ export default function ArtistTable(props) {
     },
     {
       title: "View",
-      dataIndex: "artist_viewcount",
-      key: "artist_viewcount",
+      dataIndex: "track_viewcount",
+      key: "track_viewcount",
       width: "10%",
     },
     {
       title: "Rating",
-      dataIndex: "artist_rating",
-      key: "artist_rating",
+      dataIndex: "track_rating",
+      key: "track_rating",
       width: "17%",
-      render: (artist_rating) => (
-        <Rate disabled allowHalf value={artist_rating} />
+      render: (track_rating) => (
+        <Rate disabled allowHalf value={track_rating} />
       ),
-    },
-    {
-      title: "Artist ID",
-      dataIndex: "artist_FUI",
-      key: "artist_FUI",
-      width: "30%",
     },
     {
       title: "Encoder ID",
@@ -207,7 +195,7 @@ export default function ArtistTable(props) {
               margin: 0,
             }}
           >
-            {record.artist_description}
+            {record.track_description}
           </p>
         ),
         rowExpandable: (record) => record.name !== "Not Expandable",
