@@ -107,4 +107,44 @@
 .chart_description .box.radio {
   background: #00c4a2;
 }
+.media_stat {
+  display: flex;
+  margin: 10px 0px;
+}
+.page_card.left,
+.page_card.mid,
+.page_card.right {
+  padding: 10px;
+}
+
+.page_card.left,
+.page_card.mid {
+  margin-right: 5px;
+}
+.page_card.mid,
+.page_card.right {
+  margin-left: 5px;
+}
+.stat_card {
+  padding: 0px 40px;
+  display: flex;
+  justify-content: space-between;
+}
+.stat_card h3 {
+  opacity: 0.5;
+}
+.countdown {
+  width: 32%;
+  border-radius: 0px;
+  /* margin-bottom: 10px; */
+}
+.promotion_wraper {
+  margin: 10px 0px;
+  width: 100%;
+  display: flex;
+}
+.feedback {
+  border-radius: 0px;
+  margin-left: 10px;
+}
 /* Media Summary END */

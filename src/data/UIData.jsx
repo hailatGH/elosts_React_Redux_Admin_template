@@ -107,6 +107,15 @@ export const SidebarData = [
   },
   {
     key: 7,
+    link_name: "Calendar",
+    link_icon: <i className="bx bxs-calendar"></i>,
+    link_route: "/calendar",
+    has_subMenu: false,
+    link_arrow_icon: "",
+    subMenu: [],
+  },
+  {
+    key: 8,
     link_name: "Users",
     link_icon: <i className="bx bxs-user"></i>,
     link_route: "/users",
@@ -115,7 +124,7 @@ export const SidebarData = [
     subMenu: [],
   },
   {
-    key: 8,
+    key: 9,
     link_name: "Settings",
     link_icon: <i className="bx bx-cog"></i>,
     link_route: "/settings",

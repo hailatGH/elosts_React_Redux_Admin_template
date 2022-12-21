@@ -25,6 +25,7 @@ import {
   Help,
   Logout,
   Error,
+  CustomCalendar,
 } from "../../pages";
 
 export default function CustomRoutes() {
@@ -56,6 +57,7 @@ export default function CustomRoutes() {
       </Route>
 
       <Route path="/playlists" element={<Playlists />} />
+      <Route path="/calendar" element={<CustomCalendar />} />
       <Route path="/users" element={<Users />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/profile" element={<Profile />} />

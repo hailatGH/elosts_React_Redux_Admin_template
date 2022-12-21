@@ -24,3 +24,5 @@ export { default as EpisodeSummary } from "./media/podcast/EpisodeSummary";
 
 export { default as RadioHostSummary } from "./media/radio/RadioHostSummary";
 export { default as StationSummary } from "./media/radio/StationSummary";
+
+export { default as Slide } from "./Slide";

@@ -27,3 +27,4 @@ export { default as Profile } from "./other/Profile";
 export { default as Help } from "./other/Help";
 export { default as Logout } from "./other/Logout";
 export { default as Error } from "./other/Error";
+export { default as CustomCalendar } from "./other/CustomCalendar";

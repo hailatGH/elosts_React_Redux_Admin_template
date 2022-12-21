@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Table, Rate } from "antd";
 
 const columns = [
   {
@@ -8,19 +8,20 @@ const columns = [
     render: (profileImage) => <img src={profileImage} className="user_img" />,
   },
   {
-    title: "Name",
+    title: "Artist Name",
     dataIndex: "name",
     key: "name",
   },
   {
-    title: "Gender",
-    dataIndex: "gender",
-    key: "gender",
+    title: "Rating",
+    dataIndex: "rating",
+    key: "rating",
+    render: (rating) => <Rate disabled allowHalf defaultValue={rating} />,
   },
   {
-    title: "Age",
-    key: "age",
-    dataIndex: "age",
+    title: "View Count",
+    key: "viewcount",
+    dataIndex: "viewcount",
   },
 ];
 
@@ -31,7 +32,8 @@ const data = [
       "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Artists_Profile_Images/Abeba_Desalegn_abeba.jpeg",
     name: "Abeba Desalegn",
     gender: "Female",
-    age: 32,
+    rating: 2.5,
+    viewcount: 32,
   },
   {
     key: "2",
@@ -39,7 +41,8 @@ const data = [
       "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Artists_Profile_Images/Abeba_Desalegn_abeba.jpeg",
     name: "Hailemichael Atrsaw",
     gender: "Female",
-    age: 32,
+    rating: 2.5,
+    viewcount: 32,
   },
   {
     key: "3",
@@ -47,7 +50,8 @@ const data = [
       "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Artists_Profile_Images/Abeba_Desalegn_abeba.jpeg",
     name: "Abeba Desalegn",
     gender: "Female",
-    age: 32,
+    rating: 2.5,
+    viewcount: 32,
   },
   {
     key: "4",
@@ -55,7 +59,8 @@ const data = [
       "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Artists_Profile_Images/Abeba_Desalegn_abeba.jpeg",
     name: "Abeba Desalegn",
     gender: "Female",
-    age: 32,
+    rating: 2.5,
+    viewcount: 32,
   },
   {
     key: "5",
@@ -63,7 +68,8 @@ const data = [
       "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Artists_Profile_Images/Abeba_Desalegn_abeba.jpeg",
     name: "Abeba Desalegn",
     gender: "Female",
-    age: 32,
+    rating: 2.5,
+    viewcount: 32,
   },
 ];
 

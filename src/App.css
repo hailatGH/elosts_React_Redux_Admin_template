@@ -2,6 +2,7 @@
 @import url("./style/other/home.css");
 @import url("./style/other/navbar.css");
 @import url("./style/other/dashboard.css");
+@import url("./style/other/customCalendar.css");
 
 /* App START */
 * {
