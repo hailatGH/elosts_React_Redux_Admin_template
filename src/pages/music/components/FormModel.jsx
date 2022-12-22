@@ -5,21 +5,10 @@ export default function FormModel(props) {
     <Modal
       open={props.open}
       title={props.name}
-      onOk={props.handleOk}
-      onCancel={props.handleCancel}
-      footer={[
-        <Button key="back" onClick={props.handleCancel}>
-          Cancel
-        </Button>,
-        <Button
-          key="submit"
-          type="primary"
-          loading={props.loading}
-          onClick={props.handleOk}
-        >
-          Submit
-        </Button>,
-      ]}
+      onOk={props.closeModal}
+      onCancel={props.closeModal}
+      cancelButtonProps={{ style: { display: "none" } }}
+      okButtonProps={{ style: { display: "none" } }}
     >
       {props.form}
     </Modal>

@@ -24,18 +24,6 @@ const data = [
     encoder_FUI: "0Yi6yM0YmDWd55AfF0cYea2iXsc2",
     artist_description: "Ethiopian Artist Bisre",
   },
-  {
-    key: "2",
-    artist_profileImage:
-      "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Artists_Profile_Images/Abeba_Desalegn_abeba.jpeg",
-    artist_name: "Abeba Desalegn",
-    artist_status: true,
-    artist_viewcount: 0,
-    artist_rating: 4,
-    artist_FUI: "gZkd8CJAxESJpJFmXRLnU0IFkhE3",
-    encoder_FUI: "0Yi6yM0YmDWd55AfF0cYea2iXsc2",
-    artist_description: "Ethiopian Artist Abeba",
-  },
 ];
 
 export default function ArtistTable(props) {

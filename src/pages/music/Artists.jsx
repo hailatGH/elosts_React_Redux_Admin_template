@@ -9,19 +9,11 @@ import {
 } from "./components";
 
 export default function Artists() {
-  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
   };
-  const handleOk = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(false);
-    }, 3000);
-  };
-  const handleCancel = () => {
+  const closeModal = () => {
     setOpen(false);
   };
 
@@ -44,10 +36,8 @@ export default function Artists() {
       <FormModel
         open={open}
         name="Add New Artist"
-        handleOk={handleOk}
-        handleCancel={handleCancel}
-        loading={loading}
-        form={<ArtistForm />}
+        closeModal={closeModal}
+        form={<ArtistForm closeModal={closeModal} />}
       />
 
       <div className="table_wraper">

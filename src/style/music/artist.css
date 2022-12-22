@@ -36,3 +36,49 @@
 .action_delete:hover {
   opacity: 0.5;
 }
+
+.submit_btn_wraper {
+  display: flex;
+  justify-content: center;
+}
+.submit_btn {
+  width: 150px;
+  height: 35px;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+/*  */
+.form {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 10px;
+}
+.form.artist {
+  grid-template-rows: repeat(2, 1fr);
+}
+.form-item.upload {
+  display: flex;
+  align-items: center;
+}
+.form-item.upload span {
+  opacity: 0.7;
+  width: 200px;
+}
+.form-item.upload .upload_label {
+  cursor: pointer;
+  border: 0.9px #dedede dashed;
+  background: #f2f2f2;
+  width: 100px;
+  height: 100px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.form-item.upload .upload_label:hover {
+  border: 1px #acacac dashed;
+  background: #cacaca;
+  font-weight: 700;
+}

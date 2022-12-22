@@ -1,91 +1,178 @@
-import { InboxOutlined } from "@ant-design/icons";
-import { Form, Input, InputNumber, Switch, Upload, DatePicker } from "antd";
+import { useState } from "react";
+import { Input, InputNumber, Checkbox, DatePicker, Button } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 
-const { TextArea } = Input;
-const normFile = (e) => {
-  console.log("Upload event:", e);
-  if (Array.isArray(e)) {
-    return e;
+export default function ArtistForm(props) {
+  const { TextArea } = Input;
+
+  const [formData, setFormData] = useState(() => {
+    return {
+      artist_name: "",
+      artist_title: "",
+      artist_FUI: "",
+      artist_rating: 0,
+      artist_status: false,
+      artist_description: "",
+      artist_releaseDate: null,
+      artist_profileImage: null,
+    };
+  });
+
+  function handleChange(event) {
+    const { name, value, type, checked } = event.target;
+    setFormData((prevFormData) => {
+      return {
+        ...prevFormData,
+        [name]: type === "checkbox" ? checked : value,
+      };
+    });
   }
-  return e?.fileList;
-};
 
-export default function ArtistForm() {
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
-  };
+  function handleSubmit() {
+    console.log(formData);
+  }
 
   return (
-    <Form onFinish={onFinish}>
-      <Form.Item
-        name="artistname"
-        rules={[
-          {
-            required: true,
-            message: "Please input Artist Name!",
-          },
-        ]}
-      >
+    <div className="form artist">
+      <div className="form-item">
         <Input
+          type="text"
           placeholder="Artist Name"
+          onChange={handleChange}
+          name="artist_name"
+          value={formData.artist_name}
           style={{ borderRadius: "2px", height: "40px" }}
         />
-      </Form.Item>
+      </div>
 
-      <Form.Item name="artisttitle">
+      <div className="form-item">
         <Input
+          type="text"
           placeholder="Artist Title"
+          onChange={handleChange}
+          name="artist_title"
+          value={formData.artist_title}
           style={{ borderRadius: "2px", height: "40px" }}
         />
-      </Form.Item>
+      </div>
 
-      <Form.Item name="artistrating" label="Artist Rating">
-        <InputNumber
-          placeholder="Artist Rating"
-          style={{ borderRadius: "2px", height: "30px", width: "50%" }}
-        />
-      </Form.Item>
-
-      <Form.Item
-        name="artiststatus"
-        label="Artist Status"
-        valuePropName="checked"
-      >
-        <Switch defaultChecked={true} />
-      </Form.Item>
-
-      <Form.Item name="artistreleasedate">
-        <DatePicker placement="bottomLeft" placeholder="Artist Release Date" />
-      </Form.Item>
-
-      <Form.Item name="artistdescription">
-        <TextArea rows={4} placeholder="Artist Description" />
-      </Form.Item>
-
-      <Form.Item name="artistfui">
+      <div className="form-item">
         <Input
+          type="text"
           placeholder="Artist ID"
+          onChange={handleChange}
+          name="artist_FUI"
+          value={formData.artist_FUI}
           style={{ borderRadius: "2px", height: "40px" }}
         />
-      </Form.Item>
+      </div>
 
-      <Form.Item label="Artist Profile Image">
-        <Form.Item
-          name="artist_profileImage"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-          noStyle
+      <div className="form-item">
+        <InputNumber
+          type="number"
+          placeholder="Artist Rating"
+          onChange={(value) =>
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              artist_rating: value,
+            }))
+          }
+          name="artist_rating"
+          value={formData.artist_rating}
+          min={0}
+          max={5}
+          defaultValue={0}
+          style={{
+            borderRadius: "2px",
+            height: "35px",
+            width: "50%",
+          }}
+        />
+      </div>
+
+      <div className="form-item">
+        <Checkbox
+          type="checkbox"
+          id="artist_status"
+          checked={formData.artist_status}
+          onChange={handleChange}
+          name="artist_status"
+          style={{ opacity: "0.7" }}
         >
-          <Upload.Dragger name="artist_profileImage">
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">
-              Click or drag Artist Profile Image <br /> to this area to upload
-            </p>
-          </Upload.Dragger>
-        </Form.Item>
-      </Form.Item>
-    </Form>
+          Artist Status
+        </Checkbox>
+      </div>
+
+      <div className="form-item">
+        <DatePicker
+          type="date"
+          placement="bottomLeft"
+          onChange={(date, dateString) =>
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              artist_releaseDate: dateString,
+            }))
+          }
+          name="artist_releaseDate"
+          date={formData.artist_releaseDate}
+          placeholder="Artist Release Date"
+          style={{ borderRadius: "2px" }}
+        />
+      </div>
+
+      <div className="form-item">
+        <TextArea
+          placeholder="Artist Description"
+          value={formData.artist_description}
+          onChange={handleChange}
+          name="artist_description"
+          rows={4}
+          style={{ borderRadius: "2px" }}
+        />
+      </div>
+
+      <div className="form-item upload">
+        <span>Artist Profile Picture</span>
+        <label htmlFor="files">
+          <div className="upload_label">
+            <PlusOutlined />
+            <div
+              style={{
+                marginTop: 8,
+                cursor: "pointer",
+                opacity: "0.7",
+              }}
+            >
+              Upload
+            </div>
+          </div>
+        </label>
+        <Input
+          id="files"
+          style={{ visibility: "hidden" }}
+          type="file"
+          onChange={() =>
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              artist_profileImage: event.target.files[0],
+            }))
+          }
+        />
+      </div>
+
+      <div className="form-item submit_btn_wraper">
+        <Button
+          type="primary"
+          htmlType="submit"
+          onClick={() => {
+            handleSubmit();
+            props.closeModal();
+          }}
+          className="submit_btn"
+        >
+          Submit
+        </Button>
+      </div>
+    </div>
   );
 }

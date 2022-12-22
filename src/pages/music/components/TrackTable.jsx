@@ -15,7 +15,7 @@ const data = [
   {
     key: "1",
     track_coverImage:
-      "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Tracks_Cover_Images/Lemink%20Nafekegne_Media_Files/Tracks_Cover_Images/Lemink_Nafekegn.jpg",
+      "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Tracks_Cover_Images/Libe%20Sew_Media_Files/Tracks_Cover_Images/Libe_Sew_Yene_Zema.jpg",
     track_name: "Kal Bekal",
     track_price: 50,
     track_status: true,
