@@ -1,16 +1,14 @@
 import { useState } from "react";
+import axios from "axios";
 import { Input, InputNumber, Checkbox, DatePicker, Button, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ArtistForm(props) {
   const { TextArea } = Input;
   const [imageSet, setImageSet] = useState();
   const [imageUrl, setImageUrl] = useState();
-  const [imageFile, setImageFile] = useState();
-
-  function handleImageUpload(event) {
-    setImageFile(event.target.files[0]);
-  }
 
   const [inputData, setInputData] = useState(() => {
     return {
@@ -25,6 +23,11 @@ export default function ArtistForm(props) {
     };
   });
 
+  const notify = (type, msg) => {
+    if (type === "success") toast.success(msg);
+    if (type === "error") toast.error(msg);
+  };
+
   function handleChange(event) {
     const { name, value, type, checked } = event.target;
     setInputData((prevInputData) => {
@@ -35,10 +38,7 @@ export default function ArtistForm(props) {
     });
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    console.log(inputData);
+  function cleanUp() {
     setInputData({
       artist_name: "",
       artist_title: "",
@@ -50,6 +50,37 @@ export default function ArtistForm(props) {
       artist_profileImage: null,
     });
     setImageSet(false);
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const url = "https://music-service-vdzflryflq-ew.a.run.app/webApp/artist";
+
+    const formData = new FormData();
+    for (let [key, value] of Object.entries(inputData)) {
+      formData.append(key, value);
+    }
+
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+
+    axios
+      .post(url, formData, config)
+      .then((response) => {
+        response.status === 201
+          ? notify("success", `Creating ${inputData.artist_name} succeed!`)
+          : notify("error", `Creating ${inputData.artist_name} failed!`);
+        props.closeModal();
+        cleanUp();
+      })
+      .catch((response) => {
+        notify("error", `Creating ${inputData.artist_name} failed!`);
+        props.closeModal();
+        cleanUp();
+      });
   }
 
   return (
@@ -181,15 +212,9 @@ export default function ArtistForm(props) {
           id="files"
           style={{ visibility: "hidden" }}
           type="file"
-          onChange={() => {
+          onChange={(event) => {
             setImageSet(true);
             setImageUrl(URL.createObjectURL(event.target.files[0]));
-
-            // handleImageUpload(event);
-            // const imageData = new FormData();
-            // imageData.append("file", event.target.files[0]);
-            // imageData.append("fileName", event.target.files[0].name);
-
             setInputData((prevInputData) => ({
               ...prevInputData,
               artist_profileImage: event.target.files[0],
@@ -202,10 +227,7 @@ export default function ArtistForm(props) {
         <Button
           type="primary"
           htmlType="submit"
-          onClick={() => {
-            handleSubmit(event);
-            props.closeModal();
-          }}
+          onClick={(event) => handleSubmit(event)}
           className="submit_btn"
         >
           Submit

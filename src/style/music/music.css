@@ -42,8 +42,9 @@
   justify-content: center;
 }
 .submit_btn {
+  margin-top: 20px;
   width: 150px;
-  height: 35px;
+  height: 40px;
   border-radius: 3px;
   font-size: 16px;
 }
@@ -54,8 +55,8 @@
   grid-template-columns: 1fr;
   grid-gap: 10px;
 }
-.form.artist {
-  grid-template-rows: repeat(2, 1fr);
+.form {
+  grid-template-rows: repeat(1, 1fr);
 }
 .form-item.upload {
   display: flex;
@@ -81,4 +82,9 @@
   border: 1px #acacac dashed;
   background: #cacaca;
   font-weight: 700;
+}
+
+.form-group-item {
+  display: flex;
+  justify-content: space-between;
 }

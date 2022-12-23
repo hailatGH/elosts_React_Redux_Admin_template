@@ -1,6 +1,9 @@
 import { Breadcrumb } from "antd";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import {
   AlbumForm,
   AlbumTable,
@@ -9,19 +12,11 @@ import {
 } from "./components";
 
 export default function Albums() {
-  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
   };
-  const handleOk = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(false);
-    }, 3000);
-  };
-  const handleCancel = () => {
+  const closeModal = () => {
     setOpen(false);
   };
 
@@ -44,15 +39,21 @@ export default function Albums() {
       <FormModel
         open={open}
         name="Add New Album"
-        handleOk={handleOk}
-        handleCancel={handleCancel}
-        loading={loading}
-        form={<AlbumForm />}
+        closeModal={closeModal}
+        form={<AlbumForm closeModal={closeModal} />}
       />
 
       <div className="table_wraper">
         <AlbumTable showModal={showModal} name="Album" />
       </div>
+
+      <ToastContainer
+        autoClose={3000}
+        position="top-right"
+        hideProgressBar
+        newestOnTop={true}
+        pauseOnHover={false}
+      />
     </div>
   );
 }

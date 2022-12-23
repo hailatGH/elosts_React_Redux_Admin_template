@@ -1,11 +1,14 @@
 import { Breadcrumb } from "antd";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import {
   ArtistForm,
+  ArtistTable,
   MediaPageStartCard,
   FormModel,
-  ArtistTable,
 } from "./components";
 
 export default function Artists() {
@@ -43,6 +46,14 @@ export default function Artists() {
       <div className="table_wraper">
         <ArtistTable showModal={showModal} name="Artist" />
       </div>
+
+      <ToastContainer
+        autoClose={3000}
+        position="top-right"
+        hideProgressBar
+        newestOnTop={true}
+        pauseOnHover={false}
+      />
     </div>
   );
 }
