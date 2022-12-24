@@ -1,230 +1,512 @@
-import { InboxOutlined } from "@ant-design/icons";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import {
-  Form,
   Input,
   InputNumber,
-  Switch,
-  Upload,
+  Checkbox,
   DatePicker,
+  Button,
+  Image,
   Select,
 } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const options = [];
-for (let i = 10; i < 36; i++) {
-  options.push({
-    label: i.toString(36) + i,
-    value: i.toString(36) + i,
+export default function TrackForm(props) {
+  const { TextArea } = Input;
+  const [audioSet, setAudioSet] = useState();
+  const [imageSet, setImageSet] = useState();
+  const [imageUrl, setImageUrl] = useState();
+  const [listArtist, setListArtist] = useState([]);
+  const [listAlbum, setListAlbum] = useState([]);
+  const [listGenre, setListGenre] = useState([]);
+  const [inputData, setInputData] = useState(() => {
+    return {
+      track_name: "",
+      track_rating: null,
+      track_status: false,
+      track_releaseDate: null,
+      track_description: "",
+      track_coverImage: null,
+      track_audioFile: null,
+      track_lyrics: "",
+      track_price: null,
+      artists_featuring: "",
+      encoder_FUI: "",
+      album_id: null,
+      genre_id: null,
+      artist_id: [],
+    };
   });
-}
-const handleChange = (value) => {
-  console.log(`selected ${value}`);
-};
 
-const { TextArea } = Input;
-const normFile = (e) => {
-  console.log("Upload event:", e);
-  if (Array.isArray(e)) {
-    return e;
+  useEffect(() => {
+    getArtists();
+    getGenres();
+  }, []);
+
+  useEffect(() => {
+    getAlbums(inputData.artist_id);
+  }, [inputData.artist_id]);
+
+  function getArtists() {
+    axios
+      .get("https://music-service-vdzflryflq-ew.a.run.app/webApp/artist")
+      .then(function (response) {
+        let artists = [];
+        let responseLength = Object.keys(response.data.results).length;
+        for (let i = 0; i < responseLength; i++) {
+          let artist = {};
+          artist["label"] = response.data.results[i].artist_name;
+          artist["value"] = response.data.results[i].id;
+          artists.push(artist);
+        }
+        setListArtist(artists);
+      });
   }
-  return e?.fileList;
-};
 
-export default function ArtistForm() {
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+  function getAlbums(artist_id) {
+    let artist_id_str = "1";
+    if (artist_id) {
+      artist_id_str = "";
+      for (let id of artist_id)
+        artist_id_str = artist_id_str + "," + id.toString();
+
+      artist_id_str = artist_id_str.substring(1);
+    }
+
+    axios
+      .get(
+        `https://music-service-vdzflryflq-ew.a.run.app/webApp/albumsByArtistId?artistId=${artist_id_str}`
+      )
+      .then(function (response) {
+        let albums = [];
+        let responseLength = Object.keys(response.data).length;
+        for (let i = 0; i < responseLength; i++) {
+          let album = {};
+          album["label"] = response.data[i].album_name;
+          album["value"] = response.data[i].id;
+          albums.push(album);
+        }
+        setListAlbum(albums);
+      });
+  }
+  function getGenres() {
+    axios
+      .get("https://music-service-vdzflryflq-ew.a.run.app/webApp/genre")
+      .then(function (response) {
+        let genres = [];
+        let responseLength = Object.keys(response.data.results).length;
+        for (let i = 0; i < responseLength; i++) {
+          let genre = {};
+          genre["label"] = response.data.results[i].genre_name;
+          genre["value"] = response.data.results[i].id;
+          genres.push(genre);
+        }
+        setListGenre(genres);
+      });
+  }
+
+  const notify = (type, msg) => {
+    if (type === "success") toast.success(msg);
+    if (type === "error") toast.error(msg);
   };
 
+  function handleChange(event) {
+    const { name, value, type, checked } = event.target;
+    setInputData((prevInputData) => {
+      return {
+        ...prevInputData,
+        [name]: type === "checkbox" ? checked : value,
+      };
+    });
+  }
+
+  function cleanUp() {
+    setInputData({
+      track_name: "",
+      track_rating: null,
+      track_status: false,
+      track_releaseDate: null,
+      track_description: "",
+      track_coverImage: null,
+      track_audioFile: null,
+      track_lyrics: "",
+      track_price: null,
+      artists_featuring: "",
+      encoder_FUI: "",
+      album_id: null,
+      genre_id: null,
+      artist_id: [],
+    });
+    setImageSet(false);
+    setAudioSet(false);
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    console.log(inputData);
+    const url = "https://music-service-vdzflryflq-ew.a.run.app/webApp/track";
+
+    const formData = new FormData();
+    for (let [key, value] of Object.entries(inputData)) {
+      formData.append(key, value);
+    }
+
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+
+    axios
+      .post(url, formData, config)
+      .then((response) => {
+        response.status === 201
+          ? notify("success", `Creating ${inputData.track_name} succeed!`)
+          : notify("error", `Creating ${inputData.track_name} failed!`);
+        props.closeModal();
+        cleanUp();
+      })
+      .catch((response) => {
+        notify("error", `Creating ${inputData.track_name} failed!`);
+        props.closeModal();
+        cleanUp();
+      });
+  }
+
   return (
-    <Form onFinish={onFinish}>
-      <Form.Item
-        name="trackname"
-        rules={[
-          {
-            required: true,
-            message: "Please input Track Name!",
-          },
-        ]}
-      >
+    <div className="form">
+      <div className="form-item">
         <Input
+          type="text"
           placeholder="Track Name"
+          onChange={() => handleChange(event)}
+          name="track_name"
+          value={inputData.track_name}
           style={{ borderRadius: "2px", height: "40px" }}
         />
-      </Form.Item>
+      </div>
 
-      <Form.Item name="trackrating" label="Track Rating">
-        <InputNumber
-          placeholder="Track Rating"
-          style={{ borderRadius: "2px", height: "30px", width: "50%" }}
-        />
-      </Form.Item>
-
-      <Form.Item
-        name="trackstatus"
-        label="Track Status"
-        valuePropName="checked"
-      >
-        <Switch defaultChecked={true} />
-      </Form.Item>
-
-      <Form.Item name="trackreleasedate">
-        <DatePicker placement="bottomLeft" placeholder="Track Release Date" />
-      </Form.Item>
-
-      <Form.Item name="trackdescription">
-        <TextArea rows={4} placeholder="Track Description" />
-      </Form.Item>
-
-      <Form.Item label="Track Cover Image">
-        <Form.Item
-          name="track_coverImage"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-          noStyle
+      <div className="form-group-item">
+        <div
+          className="form-item"
+          style={{ width: "100%", marginRight: "5px" }}
         >
-          <Upload.Dragger name="file">
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">
-              Click or drag Track Cover Image <br /> to this area to upload
-            </p>
-          </Upload.Dragger>
-        </Form.Item>
-      </Form.Item>
-
-      <Form.Item label="Track Audio File">
-        <Form.Item
-          name="track_audioFile"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-          noStyle
-        >
-          <Upload.Dragger name="file">
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">
-              Click or drag Track Audio File <br /> to this area to upload
-            </p>
-          </Upload.Dragger>
-        </Form.Item>
-      </Form.Item>
-
-      <Form.Item name="track_lyrics">
-        <TextArea rows={4} placeholder="Track Lyrics" />
-      </Form.Item>
-
-      <Form.Item name="track_price" label="Track Price">
-        <InputNumber
-          placeholder="Track Price"
-          style={{ borderRadius: "2px", height: "30px", width: "50%" }}
-        />
-      </Form.Item>
-
-      <Form.Item name="Featuring Artists">
-        <TextArea rows={2} placeholder="Featuring Artists" />
-      </Form.Item>
-
-      <Form.Item name="artistfui" label="Artists ID">
+          <InputNumber
+            type="number"
+            placeholder="Track Rating"
+            onChange={(value) =>
+              setInputData((prevInputData) => ({
+                ...prevInputData,
+                track_rating: value,
+              }))
+            }
+            name="track_rating"
+            value={inputData.track_rating}
+            min={0}
+            max={5}
+            style={{
+              borderRadius: "2px",
+              height: "35px",
+              width: "100%",
+            }}
+          />
+        </div>
+        <div className="form-item" style={{ width: "100%", marginLeft: "5px" }}>
+          <InputNumber
+            type="number"
+            placeholder="Track Price"
+            onChange={(value) =>
+              setInputData((prevInputData) => ({
+                ...prevInputData,
+                track_price: value,
+              }))
+            }
+            name="track_price"
+            value={inputData.track_price}
+            style={{
+              borderRadius: "2px",
+              height: "35px",
+              width: "100%",
+            }}
+          />
+        </div>
+      </div>
+      <div className="form-item">
         <Select
+          id="genre_id"
+          name="genre_id"
+          size="middle"
+          placeholder="Genre"
+          bordered={false}
+          value={inputData.genre_id}
+          onChange={(value) => {
+            setInputData((prevInputData) => {
+              return {
+                ...prevInputData,
+                genre_id: value,
+              };
+            });
+          }}
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+          filterSort={(optionA, optionB) =>
+            (optionA?.label ?? "")
+              .toLowerCase()
+              .localeCompare((optionB?.label ?? "").toLowerCase())
+          }
+          style={{
+            height: "35px",
+            borderRadius: "2px",
+            border: "1px solid #D9D9D9",
+            width: "100%",
+          }}
+          options={listGenre}
+        />
+      </div>
+      <div className="form-item">
+        <Select
+          id=""
+          name="artist_id"
           mode="multiple"
-          allowClear
-          placeholder="Please select"
-          defaultValue={["a10", "c12"]}
-          onChange={handleChange}
-          options={options}
-          style={{ borderRadius: "2px", height: "30px", width: "100%" }}
+          size="middle"
+          placeholder="Artist"
+          bordered={false}
+          value={inputData.artist_id}
+          onChange={(value) => {
+            setInputData((prevInputData) => {
+              return {
+                ...prevInputData,
+                artist_id: value,
+              };
+            });
+          }}
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+          filterSort={(optionA, optionB) =>
+            (optionA?.label ?? "")
+              .toLowerCase()
+              .localeCompare((optionB?.label ?? "").toLowerCase())
+          }
+          style={{
+            height: "70px",
+            borderRadius: "2px",
+            border: "1px solid #D9D9D9",
+            width: "100%",
+          }}
+          options={listArtist}
         />
-      </Form.Item>
+      </div>
+      <div className="form-item">
+        <Select
+          id="album_id"
+          name="album_id"
+          size="middle"
+          placeholder="Album"
+          bordered={false}
+          value={inputData.album_id}
+          onChange={(value) => {
+            setInputData((prevInputData) => {
+              return {
+                ...prevInputData,
+                album_id: value,
+              };
+            });
+          }}
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+          filterSort={(optionA, optionB) =>
+            (optionA?.label ?? "")
+              .toLowerCase()
+              .localeCompare((optionB?.label ?? "").toLowerCase())
+          }
+          style={{
+            height: "35px",
+            borderRadius: "2px",
+            border: "1px solid #D9D9D9",
+            width: "100%",
+          }}
+          options={listAlbum}
+        />
+      </div>
 
-      <Form.Item name="albumid" label="Album ID">
-        <Select
-          showSearch
-          style={{
-            width: 200,
-          }}
-          placeholder="Search to Select"
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            (option?.label ?? "").includes(input)
+      <div className="form-item">
+        <Checkbox
+          type="checkbox"
+          id="track_status"
+          checked={inputData.track_status}
+          onChange={() => handleChange(event)}
+          name="track_status"
+          style={{ opacity: "0.7" }}
+        >
+          Track Status
+        </Checkbox>
+      </div>
+
+      <div className="form-item">
+        <DatePicker
+          type="date"
+          placement="bottomLeft"
+          onChange={(date, dateString) =>
+            setInputData((prevInputData) => ({
+              ...prevInputData,
+              track_releaseDate: dateString,
+            }))
           }
-          filterSort={(optionA, optionB) =>
-            (optionA?.label ?? "")
-              .toLowerCase()
-              .localeCompare((optionB?.label ?? "").toLowerCase())
-          }
-          options={[
-            {
-              value: "1",
-              label: "Not Identified",
-            },
-            {
-              value: "2",
-              label: "Closed",
-            },
-            {
-              value: "3",
-              label: "Communicated",
-            },
-            {
-              value: "4",
-              label: "Identified",
-            },
-            {
-              value: "5",
-              label: "Resolved",
-            },
-            {
-              value: "6",
-              label: "Cancelled",
-            },
-          ]}
+          name="track_releaseDate"
+          date={inputData.track_releaseDate}
+          placeholder="Track Release Date"
+          style={{ borderRadius: "2px" }}
         />
-      </Form.Item>
-      <Form.Item name="genreid" label="Genre ID">
-        <Select
-          showSearch
-          style={{
-            width: 200,
-          }}
-          placeholder="Search to Select"
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            (option?.label ?? "").includes(input)
-          }
-          filterSort={(optionA, optionB) =>
-            (optionA?.label ?? "")
-              .toLowerCase()
-              .localeCompare((optionB?.label ?? "").toLowerCase())
-          }
-          options={[
-            {
-              value: "1",
-              label: "Not Identified",
-            },
-            {
-              value: "2",
-              label: "Closed",
-            },
-            {
-              value: "3",
-              label: "Communicated",
-            },
-            {
-              value: "4",
-              label: "Identified",
-            },
-            {
-              value: "5",
-              label: "Resolved",
-            },
-            {
-              value: "6",
-              label: "Cancelled",
-            },
-          ]}
+      </div>
+
+      <div className="form-item">
+        <TextArea
+          placeholder="Track Description"
+          value={inputData.track_description}
+          onChange={() => handleChange(event)}
+          name="track_description"
+          rows={4}
+          style={{ borderRadius: "2px" }}
         />
-      </Form.Item>
-    </Form>
+      </div>
+
+      <div className="form-item">
+        <TextArea
+          placeholder="Track Lyrics"
+          value={inputData.track_lyrics}
+          onChange={() => handleChange(event)}
+          name="track_lyrics"
+          rows={6}
+          style={{ borderRadius: "2px" }}
+        />
+      </div>
+
+      <div className="form-item">
+        <TextArea
+          placeholder="Featuring Artists"
+          value={inputData.artists_featuring}
+          onChange={() => handleChange(event)}
+          name="artists_featuring"
+          rows={2}
+          style={{ borderRadius: "2px" }}
+        />
+      </div>
+
+      <div className="form-item upload">
+        <span style={{}}>Track Cover Image</span>
+        <div className="image_upload_preview">
+          {imageSet ? (
+            <Image
+              width={100}
+              height={100}
+              src={imageUrl}
+              preview={false}
+              onClick={() => setImageSet(false)}
+              style={{ borderRadius: "4px" }}
+            />
+          ) : (
+            ""
+          )}
+          <label htmlFor="imgFiles">
+            <div className="upload_label">
+              <PlusOutlined />
+              <div
+                style={{
+                  marginTop: 8,
+                  cursor: "pointer",
+                  opacity: "0.7",
+                }}
+              >
+                Upload
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <Input
+          id="imgFiles"
+          style={{ visibility: "hidden" }}
+          type="file"
+          onChange={(event) => {
+            setImageUrl(URL.createObjectURL(event.target.files[0]));
+            setInputData((prevInputData) => ({
+              ...prevInputData,
+              track_coverImage: event.target.files[0],
+            }));
+            setImageSet(true);
+          }}
+        />
+      </div>
+
+      <div className="form-item upload">
+        <span>Track Audio File</span>
+        {audioSet ? (
+          <label htmlFor="audioFiles" onClick={() => setAudioSet(false)}>
+            <div className="upload_label audio">
+              <i
+                className="bx bx-check-double"
+                style={{ color: "green", fontWeight: 700, fontSize: "20px" }}
+              ></i>
+              <div
+                style={{
+                  marginTop: 8,
+                  cursor: "pointer",
+                  opacity: "0.7",
+                  color: "green",
+                }}
+              >
+                Uploaded
+              </div>
+            </div>
+          </label>
+        ) : (
+          <label htmlFor="audioFiles">
+            <div className="upload_label audio">
+              <PlusOutlined />
+              <div
+                style={{
+                  marginTop: 8,
+                  cursor: "pointer",
+                  opacity: "0.7",
+                }}
+              >
+                Upload
+              </div>
+            </div>
+          </label>
+        )}
+        <Input
+          id="audioFiles"
+          style={{ visibility: "hidden" }}
+          type="file"
+          onChange={(event) => {
+            setAudioSet(true);
+            setInputData((prevInputData) => ({
+              ...prevInputData,
+              track_audioFile: event.target.files[0],
+            }));
+          }}
+        />
+      </div>
+
+      <div className="form-item submit_btn_wraper">
+        <Button
+          type="primary"
+          htmlType="submit"
+          onClick={(event) => handleSubmit(event)}
+          className="submit_btn"
+        >
+          Submit
+        </Button>
+      </div>
+    </div>
   );
 }

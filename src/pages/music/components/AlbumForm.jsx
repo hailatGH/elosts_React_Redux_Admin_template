@@ -17,10 +17,7 @@ export default function AlbumForm(props) {
   const { TextArea } = Input;
   const [imageSet, setImageSet] = useState();
   const [imageUrl, setImageUrl] = useState();
-
   const [listArtist, setListArtist] = useState([]);
-  // const [triggerGetArtist, setTriggerGetArtist] = useState(false);
-
   const [inputData, setInputData] = useState(() => {
     return {
       album_name: "",

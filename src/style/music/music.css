@@ -64,7 +64,7 @@
 }
 .form-item.upload span {
   opacity: 0.7;
-  width: 200px;
+  min-width: 200px;
 }
 .form-item.upload .upload_label {
   cursor: pointer;
@@ -78,13 +78,20 @@
   justify-content: center;
   align-items: center;
 }
+.form-item.upload .upload_label.audio {
+  height: 70px;
+}
 .form-item.upload .upload_label:hover {
   border: 1px #acacac dashed;
   background: #cacaca;
   font-weight: 700;
 }
-
 .form-group-item {
   display: flex;
   justify-content: space-between;
+}
+.image_upload_preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10px;
 }

@@ -1,6 +1,9 @@
 import { Breadcrumb } from "antd";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import {
   GenreForm,
   GenreTable,
@@ -9,19 +12,11 @@ import {
 } from "./components";
 
 export default function Geners() {
-  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
   };
-  const handleOk = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(false);
-    }, 3000);
-  };
-  const handleCancel = () => {
+  const closeModal = () => {
     setOpen(false);
   };
 
@@ -44,15 +39,21 @@ export default function Geners() {
       <FormModel
         open={open}
         name="Add New Genre"
-        handleOk={handleOk}
-        handleCancel={handleCancel}
-        loading={loading}
-        form={<GenreForm />}
+        closeModal={closeModal}
+        form={<GenreForm closeModal={closeModal} />}
       />
 
       <div className="table_wraper">
         <GenreTable showModal={showModal} name="Genre" />
       </div>
+
+      <ToastContainer
+        autoClose={3000}
+        position="top-right"
+        hideProgressBar
+        newestOnTop={true}
+        pauseOnHover={false}
+      />
     </div>
   );
 }

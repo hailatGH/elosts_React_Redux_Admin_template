@@ -1,73 +1,195 @@
-import { InboxOutlined } from "@ant-design/icons";
-import { Form, Input, InputNumber, Switch, Upload, DatePicker } from "antd";
+import { useState } from "react";
+import axios from "axios";
+import { Input, InputNumber, Checkbox, DatePicker, Button, Image } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const { TextArea } = Input;
-const normFile = (e) => {
-  console.log("Upload event:", e);
-  if (Array.isArray(e)) {
-    return e;
-  }
-  return e?.fileList;
-};
+export default function GenreForm(props) {
+  const { TextArea } = Input;
+  const [imageSet, setImageSet] = useState();
+  const [imageUrl, setImageUrl] = useState();
 
-export default function ArtistForm() {
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+  const [inputData, setInputData] = useState(() => {
+    return {
+      genre_name: "",
+      genre_rating: null,
+      genre_status: false,
+      genre_description: "",
+      genre_coverImage: null,
+      encoder_FUI: "",
+    };
+  });
+
+  const notify = (type, msg) => {
+    if (type === "success") toast.success(msg);
+    if (type === "error") toast.error(msg);
   };
 
+  function handleChange(event) {
+    const { name, value, type, checked } = event.target;
+    setInputData((prevInputData) => {
+      return {
+        ...prevInputData,
+        [name]: type === "checkbox" ? checked : value,
+      };
+    });
+  }
+
+  function cleanUp() {
+    setInputData({
+      genre_name: "",
+      genre_rating: null,
+      genre_status: false,
+      genre_description: "",
+      genre_coverImage: null,
+      encoder_FUI: "",
+    });
+    setImageSet(false);
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const url = "https://music-service-vdzflryflq-ew.a.run.app/webApp/genre";
+
+    const formData = new FormData();
+    for (let [key, value] of Object.entries(inputData)) {
+      formData.append(key, value);
+    }
+
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+
+    axios
+      .post(url, formData, config)
+      .then((response) => {
+        response.status === 201
+          ? notify("success", `Creating ${inputData.genre_name} succeed!`)
+          : notify("error", `Creating ${inputData.genre_name} failed!`);
+        props.closeModal();
+        cleanUp();
+      })
+      .catch((response) => {
+        notify("error", `Creating ${inputData.genre_name} failed!`);
+        props.closeModal();
+        cleanUp();
+      });
+  }
+
   return (
-    <Form onFinish={onFinish}>
-      <Form.Item
-        name="genrename"
-        rules={[
-          {
-            required: true,
-            message: "Please input Genre Name!",
-          },
-        ]}
-      >
+    <div className="form">
+      <div className="form-item">
         <Input
+          type="text"
           placeholder="Genre Name"
+          onChange={() => handleChange(event)}
+          name="genre_name"
+          value={inputData.genre_name}
           style={{ borderRadius: "2px", height: "40px" }}
         />
-      </Form.Item>
+      </div>
 
-      <Form.Item name="genrerating" label="Genre Rating">
+      <div className="form-item">
         <InputNumber
+          type="number"
           placeholder="Genre Rating"
-          style={{ borderRadius: "2px", height: "30px", width: "50%" }}
+          onChange={(value) =>
+            setInputData((prevInputData) => ({
+              ...prevInputData,
+              genre_rating: value,
+            }))
+          }
+          name="genre_rating"
+          value={inputData.genre_rating}
+          min={0}
+          max={5}
+          style={{
+            borderRadius: "2px",
+            height: "35px",
+            width: "50%",
+          }}
         />
-      </Form.Item>
+      </div>
 
-      <Form.Item
-        name="genrestatus"
-        label="Genre Status"
-        valuePropName="checked"
-      >
-        <Switch defaultChecked={true} />
-      </Form.Item>
-
-      <Form.Item name="genredescription">
-        <TextArea rows={4} placeholder="Genre Description" />
-      </Form.Item>
-
-      <Form.Item label="Genre Cover Image">
-        <Form.Item
-          name="genre_coverImage"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-          noStyle
+      <div className="form-item">
+        <Checkbox
+          type="checkbox"
+          id="genre_status"
+          checked={inputData.genre_status}
+          onChange={() => handleChange(event)}
+          name="genre_status"
+          style={{ opacity: "0.7" }}
         >
-          <Upload.Dragger name="file">
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">
-              Click or drag Genre Cover Image <br /> to this area to upload
-            </p>
-          </Upload.Dragger>
-        </Form.Item>
-      </Form.Item>
-    </Form>
+          Genre Status
+        </Checkbox>
+      </div>
+
+      <div className="form-item">
+        <TextArea
+          placeholder="Genre Description"
+          value={inputData.genre_description}
+          onChange={() => handleChange(event)}
+          name="genre_description"
+          rows={4}
+          style={{ borderRadius: "2px" }}
+        />
+      </div>
+
+      <div className="form-item upload">
+        <span>Genre Cover Image</span>
+        {imageSet ? (
+          <Image
+            width={200}
+            height={100}
+            style={{ borderRadius: "4px" }}
+            src={imageUrl}
+            preview={false}
+            onClick={() => setImageSet(false)}
+          />
+        ) : (
+          <label htmlFor="files">
+            <div className="upload_label">
+              <PlusOutlined />
+              <div
+                style={{
+                  marginTop: 8,
+                  cursor: "pointer",
+                  opacity: "0.7",
+                }}
+              >
+                Upload
+              </div>
+            </div>
+          </label>
+        )}
+        <Input
+          id="files"
+          style={{ visibility: "hidden" }}
+          type="file"
+          onChange={(event) => {
+            setImageSet(true);
+            setImageUrl(URL.createObjectURL(event.target.files[0]));
+            setInputData((prevInputData) => ({
+              ...prevInputData,
+              genre_coverImage: event.target.files[0],
+            }));
+          }}
+        />
+      </div>
+
+      <div className="form-item submit_btn_wraper">
+        <Button
+          type="primary"
+          htmlType="submit"
+          onClick={(event) => handleSubmit(event)}
+          className="submit_btn"
+        >
+          Submit
+        </Button>
+      </div>
+    </div>
   );
 }
