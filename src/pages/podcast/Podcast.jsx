@@ -1,3 +1,3 @@
-export default function Podcast() {
-  return <h1>Podcast</h1>;
+export default function Podcasts() {
+  return <h1>Podcasts</h1>;
 }

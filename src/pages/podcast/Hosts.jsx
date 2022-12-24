@@ -5,13 +5,13 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import {
-  SeasonForm,
-  AlbumTable,
+  HostForm,
+  ArtistTable,
   MediaPageStartCard,
   FormModel,
 } from "../../components";
 
-export default function Seasons() {
+export default function Hosts() {
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
@@ -30,21 +30,21 @@ export default function Seasons() {
           <NavLink to="/podcast">Podcast</NavLink>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <NavLink to="/podcast/seasons">Seasons</NavLink>
+          <NavLink to="/podcast/hosts">Host</NavLink>
         </Breadcrumb.Item>
       </Breadcrumb>
 
-      <MediaPageStartCard showModal={showModal} name="Season" />
+      <MediaPageStartCard showModal={showModal} name="Host" />
 
       <FormModel
         open={open}
-        name="Add New Season"
+        name="Add New Host"
         closeModal={closeModal}
-        form={<SeasonForm closeModal={closeModal} />}
+        form={<HostForm closeModal={closeModal} />}
       />
 
       <div className="table_wraper">
-        <AlbumTable showModal={showModal} name="Season" />
+        <ArtistTable showModal={showModal} name="Host" />
       </div>
 
       <ToastContainer

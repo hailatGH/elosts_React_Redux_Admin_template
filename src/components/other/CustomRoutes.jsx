@@ -12,11 +12,10 @@ import {
   Tracks,
   Podcast,
   Episodes,
-  PodcastHosts,
+  Hosts,
   Podcasts,
   Seasons,
   Radio,
-  RadioHosts,
   Stations,
   Playlists,
   Users,
@@ -26,6 +25,7 @@ import {
   Logout,
   Error,
   CustomCalendar,
+  Category,
 } from "../../pages";
 
 export default function CustomRoutes() {
@@ -45,14 +45,14 @@ export default function CustomRoutes() {
       <Route path="/podcast">
         <Route index element={<Podcast />} />
         <Route path="episodes" element={<Episodes />} />
-        <Route path="podcastHosts" element={<PodcastHosts />} />
+        <Route path="categories" element={<Category />} />
+        <Route path="hosts" element={<Hosts />} />
         <Route path="podcasts" element={<Podcasts />} />
         <Route path="seasons" element={<Seasons />} />
       </Route>
 
       <Route path="/radio">
         <Route index element={<Radio />} />
-        <Route path="radioHosts" element={<RadioHosts />} />
         <Route path="stations" element={<Stations />} />
       </Route>
 

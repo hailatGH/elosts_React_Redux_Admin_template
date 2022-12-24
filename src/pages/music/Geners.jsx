@@ -9,7 +9,7 @@ import {
   GenreTable,
   MediaPageStartCard,
   FormModel,
-} from "./components";
+} from "../../components";
 
 export default function Geners() {
   const [open, setOpen] = useState(false);
@@ -30,7 +30,7 @@ export default function Geners() {
           <NavLink to="/music">Music</NavLink>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <NavLink to="/geners">Genre</NavLink>
+          <NavLink to="/music/geners">Genre</NavLink>
         </Breadcrumb.Item>
       </Breadcrumb>
 

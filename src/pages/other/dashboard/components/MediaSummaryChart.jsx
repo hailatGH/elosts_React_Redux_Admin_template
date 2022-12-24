@@ -1,6 +1,6 @@
 import { PieChart, Pie, Cell } from "recharts";
 // Cusotm hook import
-import { useSidebarState } from "../../../../../contexts/UIContexts";
+import { useSidebarState } from "../../../../contexts/UIContexts";
 
 const data = [
   { name: "Group A", value: 700 },

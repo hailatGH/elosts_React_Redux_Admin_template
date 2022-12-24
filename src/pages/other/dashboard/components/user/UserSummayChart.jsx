@@ -21,7 +21,6 @@ export default function UserSummayChart(props) {
   if (props.status === "weekly") data = weekData;
   if (props.status === "monthly") data = monthData;
   if (props.status === "yearly") data = yearData;
-  // console.log(props.s)
 
   return (
     <BarChart

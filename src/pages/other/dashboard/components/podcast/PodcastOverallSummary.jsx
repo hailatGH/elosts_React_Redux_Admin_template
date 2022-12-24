@@ -4,7 +4,7 @@ import {
   CategorySummary,
   EpisodeSummary,
   PodcastSummary,
-} from "../../../components";
+} from "../../components";
 
 export default function PodcastOverallSummary() {
   return (

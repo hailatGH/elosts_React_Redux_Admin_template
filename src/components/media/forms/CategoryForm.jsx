@@ -1,22 +1,22 @@
 import { useState } from "react";
 import axios from "axios";
-import { Input, InputNumber, Checkbox, DatePicker, Button, Image } from "antd";
+import { Input, InputNumber, Checkbox, Button, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function GenreForm(props) {
+export default function CategoryForm(props) {
   const { TextArea } = Input;
   const [imageSet, setImageSet] = useState();
   const [imageUrl, setImageUrl] = useState();
 
   const [inputData, setInputData] = useState(() => {
     return {
-      genre_name: "",
-      genre_rating: null,
-      genre_status: false,
-      genre_description: "",
-      genre_coverImage: null,
+      category_name: "",
+      category_rating: null,
+      category_status: false,
+      category_description: "",
+      category_coverImage: null,
       encoder_FUI: "",
     };
   });
@@ -38,11 +38,11 @@ export default function GenreForm(props) {
 
   function cleanUp() {
     setInputData({
-      genre_name: "",
-      genre_rating: null,
-      genre_status: false,
-      genre_description: "",
-      genre_coverImage: null,
+      category_name: "",
+      category_rating: null,
+      category_status: false,
+      category_description: "",
+      category_coverImage: null,
       encoder_FUI: "",
     });
     setImageSet(false);
@@ -50,33 +50,35 @@ export default function GenreForm(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    const url = "https://music-service-vdzflryflq-ew.a.run.app/webApp/genre";
+    console.log(inputData);
+    // const url =
+    //   "http://podcast-service.calmgrass-743c6f7f.francecentral.azurecontainerapps.io/webApp/category";
 
-    const formData = new FormData();
-    for (let [key, value] of Object.entries(inputData)) {
-      formData.append(key, value);
-    }
+    // const formData = new FormData();
+    // for (let [key, value] of Object.entries(inputData)) {
+    //   formData.append(key, value);
+    // }
 
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
+    // const config = {
+    //   headers: {
+    //     "content-type": "multipart/form-data",
+    //   },
+    // };
 
-    axios
-      .post(url, formData, config)
-      .then((response) => {
-        response.status === 201
-          ? notify("success", `Creating ${inputData.genre_name} succeed!`)
-          : notify("error", `Creating ${inputData.genre_name} failed!`);
-        props.closeModal();
-        cleanUp();
-      })
-      .catch((response) => {
-        notify("error", `Creating ${inputData.genre_name} failed!`);
-        props.closeModal();
-        cleanUp();
-      });
+    // axios
+    //   .post(url, formData, config)
+    //   .then((response) => {
+    //     response.status === 201
+    //       ? notify("success", `Creating ${inputData.genre_name} succeed!`)
+    //       : notify("error", `Creating ${inputData.genre_name} failed!`);
+    //     props.closeModal();
+    //     cleanUp();
+    //   })
+    //   .catch((response) => {
+    //     notify("error", `Creating ${inputData.genre_name} failed!`);
+    //     props.closeModal();
+    //     cleanUp();
+    //   });
   }
 
   return (
@@ -84,10 +86,10 @@ export default function GenreForm(props) {
       <div className="form-item">
         <Input
           type="text"
-          placeholder="Genre Name"
+          placeholder="Name"
           onChange={() => handleChange(event)}
-          name="genre_name"
-          value={inputData.genre_name}
+          name="category_name"
+          value={inputData.category_name}
           style={{ borderRadius: "2px", height: "40px" }}
         />
       </div>
@@ -95,15 +97,15 @@ export default function GenreForm(props) {
       <div className="form-item">
         <InputNumber
           type="number"
-          placeholder="Genre Rating"
+          placeholder="Rating"
           onChange={(value) =>
             setInputData((prevInputData) => ({
               ...prevInputData,
-              genre_rating: value,
+              category_rating: value,
             }))
           }
-          name="genre_rating"
-          value={inputData.genre_rating}
+          name="category_rating"
+          value={inputData.category_rating}
           min={0}
           max={5}
           style={{
@@ -117,40 +119,43 @@ export default function GenreForm(props) {
       <div className="form-item">
         <Checkbox
           type="checkbox"
-          id="genre_status"
-          checked={inputData.genre_status}
+          id="category_status"
+          checked={inputData.category_status}
           onChange={() => handleChange(event)}
-          name="genre_status"
+          name="category_status"
           style={{ opacity: "0.7" }}
         >
-          Genre Status
+          Status
         </Checkbox>
       </div>
 
       <div className="form-item">
         <TextArea
-          placeholder="Genre Description"
-          value={inputData.genre_description}
+          placeholder="Description"
+          value={inputData.category_description}
           onChange={() => handleChange(event)}
-          name="genre_description"
+          name="category_description"
           rows={4}
           style={{ borderRadius: "2px" }}
         />
       </div>
 
       <div className="form-item upload">
-        <span>Genre Cover Image</span>
-        {imageSet ? (
-          <Image
-            width={200}
-            height={100}
-            style={{ borderRadius: "4px" }}
-            src={imageUrl}
-            preview={false}
-            onClick={() => setImageSet(false)}
-          />
-        ) : (
-          <label htmlFor="files">
+        <span>Cover Image</span>
+        <div className="image_upload_preview">
+          {imageSet ? (
+            <Image
+              width={100}
+              height={100}
+              src={imageUrl}
+              preview={false}
+              onClick={() => setImageSet(false)}
+              style={{ borderRadius: "4px" }}
+            />
+          ) : (
+            ""
+          )}
+          <label htmlFor="imgFiles">
             <div className="upload_label">
               <PlusOutlined />
               <div
@@ -164,9 +169,9 @@ export default function GenreForm(props) {
               </div>
             </div>
           </label>
-        )}
+        </div>
         <Input
-          id="files"
+          id="imgFiles"
           style={{ visibility: "hidden" }}
           type="file"
           onChange={(event) => {
@@ -174,7 +179,7 @@ export default function GenreForm(props) {
             setImageUrl(URL.createObjectURL(event.target.files[0]));
             setInputData((prevInputData) => ({
               ...prevInputData,
-              genre_coverImage: event.target.files[0],
+              category_coverImage: event.target.files[0],
             }));
           }}
         />

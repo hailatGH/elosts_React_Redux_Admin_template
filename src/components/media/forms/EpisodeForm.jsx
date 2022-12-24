@@ -13,97 +13,98 @@ import { PlusOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function TrackForm(props) {
+export default function EpisodeForm(props) {
   const { TextArea } = Input;
   const [audioSet, setAudioSet] = useState();
   const [imageSet, setImageSet] = useState();
   const [imageUrl, setImageUrl] = useState();
-  const [listArtist, setListArtist] = useState([]);
-  const [listAlbum, setListAlbum] = useState([]);
-  const [listGenre, setListGenre] = useState([]);
+  const [listHost, setListHost] = useState([]);
+  const [listCategory, setListCategory] = useState([]);
+  const [listPodcast, setListPodcast] = useState([]);
+  const [listSeason, setListSeason] = useState([]);
   const [inputData, setInputData] = useState(() => {
     return {
-      track_name: "",
-      track_rating: null,
-      track_status: false,
-      track_releaseDate: null,
-      track_description: "",
-      track_coverImage: null,
-      track_audioFile: null,
-      track_lyrics: "",
-      track_price: null,
-      artists_featuring: "",
+      episode_name: "",
+      episode_rating: null,
+      episode_status: false,
+      episode_releaseDate: null,
+      episode_description: "",
+      episode_coverImage: null,
+      episode_audioFile: null,
+      episode_price: null,
       encoder_FUI: "",
-      album_id: null,
-      genre_id: null,
-      artist_id: [],
+      host: null,
+      category: null,
+      podcast: null,
+      season: null,
     };
   });
 
   useEffect(() => {
-    getArtists();
-    getGenres();
+    getHosts();
+    getCategories();
+    getPodcasts();
+    getSeasons();
   }, []);
 
-  useEffect(() => {
-    getAlbums(inputData.artist_id);
-  }, [inputData.artist_id]);
-
-  function getArtists() {
+  function getHosts() {
     axios
       .get("https://music-service-vdzflryflq-ew.a.run.app/webApp/artist")
       .then(function (response) {
-        let artists = [];
+        let hosts = [];
         let responseLength = Object.keys(response.data.results).length;
         for (let i = 0; i < responseLength; i++) {
-          let artist = {};
-          artist["label"] = response.data.results[i].artist_name;
-          artist["value"] = response.data.results[i].id;
-          artists.push(artist);
+          let host = {};
+          host["label"] = response.data.results[i].artist_name;
+          host["value"] = response.data.results[i].id;
+          hosts.push(host);
         }
-        setListArtist(artists);
+        setListHost(hosts);
       });
   }
-
-  function getAlbums(artist_id) {
-    let artist_id_str = "1";
-    if (artist_id) {
-      artist_id_str = "";
-      for (let id of artist_id)
-        artist_id_str = artist_id_str + "," + id.toString();
-
-      artist_id_str = artist_id_str.substring(1);
-    }
-
+  function getCategories() {
     axios
-      .get(
-        `https://music-service-vdzflryflq-ew.a.run.app/webApp/albumsByArtistId?artistId=${artist_id_str}`
-      )
+      .get("https://music-service-vdzflryflq-ew.a.run.app/webApp/artist")
       .then(function (response) {
-        let albums = [];
-        let responseLength = Object.keys(response.data).length;
-        for (let i = 0; i < responseLength; i++) {
-          let album = {};
-          album["label"] = response.data[i].album_name;
-          album["value"] = response.data[i].id;
-          albums.push(album);
-        }
-        setListAlbum(albums);
-      });
-  }
-  function getGenres() {
-    axios
-      .get("https://music-service-vdzflryflq-ew.a.run.app/webApp/genre")
-      .then(function (response) {
-        let genres = [];
+        let caregories = [];
         let responseLength = Object.keys(response.data.results).length;
         for (let i = 0; i < responseLength; i++) {
-          let genre = {};
-          genre["label"] = response.data.results[i].genre_name;
-          genre["value"] = response.data.results[i].id;
-          genres.push(genre);
+          let category = {};
+          category["label"] = response.data.results[i].artist_name;
+          category["value"] = response.data.results[i].id;
+          caregories.push(category);
         }
-        setListGenre(genres);
+        setListCategory(caregories);
+      });
+  }
+  function getPodcasts() {
+    axios
+      .get("https://music-service-vdzflryflq-ew.a.run.app/webApp/artist")
+      .then(function (response) {
+        let podcasts = [];
+        let responseLength = Object.keys(response.data.results).length;
+        for (let i = 0; i < responseLength; i++) {
+          let podcast = {};
+          podcast["label"] = response.data.results[i].artist_name;
+          podcast["value"] = response.data.results[i].id;
+          podcasts.push(podcast);
+        }
+        setListPodcast(podcasts);
+      });
+  }
+  function getSeasons() {
+    axios
+      .get("https://music-service-vdzflryflq-ew.a.run.app/webApp/artist")
+      .then(function (response) {
+        let seasons = [];
+        let responseLength = Object.keys(response.data.results).length;
+        for (let i = 0; i < responseLength; i++) {
+          let season = {};
+          season["label"] = response.data.results[i].artist_name;
+          season["value"] = response.data.results[i].id;
+          seasons.push(season);
+        }
+        setListSeason(seasons);
       });
   }
 
@@ -124,20 +125,19 @@ export default function TrackForm(props) {
 
   function cleanUp() {
     setInputData({
-      track_name: "",
-      track_rating: null,
-      track_status: false,
-      track_releaseDate: null,
-      track_description: "",
-      track_coverImage: null,
-      track_audioFile: null,
-      track_lyrics: "",
-      track_price: null,
-      artists_featuring: "",
+      episode_name: "",
+      episode_rating: null,
+      episode_status: false,
+      episode_releaseDate: null,
+      episode_description: "",
+      episode_coverImage: null,
+      episode_audioFile: null,
+      episode_price: null,
       encoder_FUI: "",
-      album_id: null,
-      genre_id: null,
-      artist_id: [],
+      host: null,
+      category: null,
+      podcast: null,
+      season: null,
     });
     setImageSet(false);
     setAudioSet(false);
@@ -146,33 +146,33 @@ export default function TrackForm(props) {
   function handleSubmit(event) {
     event.preventDefault();
     console.log(inputData);
-    const url = "https://music-service-vdzflryflq-ew.a.run.app/webApp/track";
+    // const url = "https://music-service-vdzflryflq-ew.a.run.app/webApp/track";
 
-    const formData = new FormData();
-    for (let [key, value] of Object.entries(inputData)) {
-      formData.append(key, value);
-    }
+    // const formData = new FormData();
+    // for (let [key, value] of Object.entries(inputData)) {
+    //   formData.append(key, value);
+    // }
 
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
+    // const config = {
+    //   headers: {
+    //     "content-type": "multipart/form-data",
+    //   },
+    // };
 
-    axios
-      .post(url, formData, config)
-      .then((response) => {
-        response.status === 201
-          ? notify("success", `Creating ${inputData.track_name} succeed!`)
-          : notify("error", `Creating ${inputData.track_name} failed!`);
-        props.closeModal();
-        cleanUp();
-      })
-      .catch((response) => {
-        notify("error", `Creating ${inputData.track_name} failed!`);
-        props.closeModal();
-        cleanUp();
-      });
+    // axios
+    //   .post(url, formData, config)
+    //   .then((response) => {
+    //     response.status === 201
+    //       ? notify("success", `Creating ${inputData.track_name} succeed!`)
+    //       : notify("error", `Creating ${inputData.track_name} failed!`);
+    //     props.closeModal();
+    //     cleanUp();
+    //   })
+    //   .catch((response) => {
+    //     notify("error", `Creating ${inputData.track_name} failed!`);
+    //     props.closeModal();
+    //     cleanUp();
+    //   });
   }
 
   return (
@@ -180,10 +180,10 @@ export default function TrackForm(props) {
       <div className="form-item">
         <Input
           type="text"
-          placeholder="Track Name"
+          placeholder="Name"
           onChange={() => handleChange(event)}
-          name="track_name"
-          value={inputData.track_name}
+          name="episode_name"
+          value={inputData.episode_name}
           style={{ borderRadius: "2px", height: "40px" }}
         />
       </div>
@@ -195,15 +195,15 @@ export default function TrackForm(props) {
         >
           <InputNumber
             type="number"
-            placeholder="Track Rating"
+            placeholder="Rating"
             onChange={(value) =>
               setInputData((prevInputData) => ({
                 ...prevInputData,
-                track_rating: value,
+                episode_rating: value,
               }))
             }
-            name="track_rating"
-            value={inputData.track_rating}
+            name="episode_rating"
+            value={inputData.episode_rating}
             min={0}
             max={5}
             style={{
@@ -216,15 +216,15 @@ export default function TrackForm(props) {
         <div className="form-item" style={{ width: "100%", marginLeft: "5px" }}>
           <InputNumber
             type="number"
-            placeholder="Track Price"
+            placeholder="Price"
             onChange={(value) =>
               setInputData((prevInputData) => ({
                 ...prevInputData,
-                track_price: value,
+                episode_price: value,
               }))
             }
-            name="track_price"
-            value={inputData.track_price}
+            name="episode_price"
+            value={inputData.episode_price}
             style={{
               borderRadius: "2px",
               height: "35px",
@@ -235,17 +235,17 @@ export default function TrackForm(props) {
       </div>
       <div className="form-item">
         <Select
-          id="genre_id"
-          name="genre_id"
+          id="category"
+          name="category"
           size="middle"
-          placeholder="Genre"
+          placeholder="Category"
           bordered={false}
-          value={inputData.genre_id}
+          value={inputData.category}
           onChange={(value) => {
             setInputData((prevInputData) => {
               return {
                 ...prevInputData,
-                genre_id: value,
+                category: value,
               };
             });
           }}
@@ -264,57 +264,22 @@ export default function TrackForm(props) {
             border: "1px solid #D9D9D9",
             width: "100%",
           }}
-          options={listGenre}
+          options={listCategory}
         />
       </div>
       <div className="form-item">
         <Select
-          id=""
-          name="artist_id"
-          mode="multiple"
+          id="host"
+          name="host"
           size="middle"
-          placeholder="Artist"
+          placeholder="Host"
           bordered={false}
-          value={inputData.artist_id}
+          value={inputData.host}
           onChange={(value) => {
             setInputData((prevInputData) => {
               return {
                 ...prevInputData,
-                artist_id: value,
-              };
-            });
-          }}
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-          }
-          filterSort={(optionA, optionB) =>
-            (optionA?.label ?? "")
-              .toLowerCase()
-              .localeCompare((optionB?.label ?? "").toLowerCase())
-          }
-          style={{
-            height: "70px",
-            borderRadius: "2px",
-            border: "1px solid #D9D9D9",
-            width: "100%",
-          }}
-          options={listArtist}
-        />
-      </div>
-      <div className="form-item">
-        <Select
-          id="album_id"
-          name="album_id"
-          size="middle"
-          placeholder="Album"
-          bordered={false}
-          value={inputData.album_id}
-          onChange={(value) => {
-            setInputData((prevInputData) => {
-              return {
-                ...prevInputData,
-                album_id: value,
+                host: value,
               };
             });
           }}
@@ -333,20 +298,88 @@ export default function TrackForm(props) {
             border: "1px solid #D9D9D9",
             width: "100%",
           }}
-          options={listAlbum}
+          options={listHost}
+        />
+      </div>
+      <div className="form-item">
+        <Select
+          id="podcast"
+          name="podcast"
+          size="middle"
+          placeholder="Podcast"
+          bordered={false}
+          value={inputData.podcast}
+          onChange={(value) => {
+            setInputData((prevInputData) => {
+              return {
+                ...prevInputData,
+                podcast: value,
+              };
+            });
+          }}
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+          filterSort={(optionA, optionB) =>
+            (optionA?.label ?? "")
+              .toLowerCase()
+              .localeCompare((optionB?.label ?? "").toLowerCase())
+          }
+          style={{
+            height: "35px",
+            borderRadius: "2px",
+            border: "1px solid #D9D9D9",
+            width: "100%",
+          }}
+          options={listPodcast}
+        />
+      </div>
+      <div className="form-item">
+        <Select
+          id="season"
+          name="season"
+          size="middle"
+          placeholder="Season"
+          bordered={false}
+          value={inputData.season}
+          onChange={(value) => {
+            setInputData((prevInputData) => {
+              return {
+                ...prevInputData,
+                season: value,
+              };
+            });
+          }}
+          optionFilterProp="children"
+          filterOption={(input, option) =>
+            (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+          }
+          filterSort={(optionA, optionB) =>
+            (optionA?.label ?? "")
+              .toLowerCase()
+              .localeCompare((optionB?.label ?? "").toLowerCase())
+          }
+          style={{
+            height: "35px",
+            borderRadius: "2px",
+            border: "1px solid #D9D9D9",
+            width: "100%",
+          }}
+          options={listSeason}
         />
       </div>
 
       <div className="form-item">
         <Checkbox
           type="checkbox"
-          id="track_status"
-          checked={inputData.track_status}
+          id="episode_status"
+          checked={inputData.episode_status}
           onChange={() => handleChange(event)}
-          name="track_status"
+          name="episode_status"
           style={{ opacity: "0.7" }}
         >
-          Track Status
+          Status
         </Checkbox>
       </div>
 
@@ -357,51 +390,29 @@ export default function TrackForm(props) {
           onChange={(date, dateString) =>
             setInputData((prevInputData) => ({
               ...prevInputData,
-              track_releaseDate: dateString,
+              episode_releaseDate: dateString,
             }))
           }
-          name="track_releaseDate"
-          date={inputData.track_releaseDate}
-          placeholder="Track Release Date"
+          name="episode_releaseDate"
+          date={inputData.episode_releaseDate}
+          placeholder="Release Date"
           style={{ borderRadius: "2px" }}
         />
       </div>
 
       <div className="form-item">
         <TextArea
-          placeholder="Track Description"
-          value={inputData.track_description}
+          placeholder="Description"
+          value={inputData.episode_description}
           onChange={() => handleChange(event)}
-          name="track_description"
+          name="episode_description"
           rows={4}
           style={{ borderRadius: "2px" }}
         />
       </div>
 
-      <div className="form-item">
-        <TextArea
-          placeholder="Track Lyrics"
-          value={inputData.track_lyrics}
-          onChange={() => handleChange(event)}
-          name="track_lyrics"
-          rows={6}
-          style={{ borderRadius: "2px" }}
-        />
-      </div>
-
-      <div className="form-item">
-        <TextArea
-          placeholder="Featuring Artists"
-          value={inputData.artists_featuring}
-          onChange={() => handleChange(event)}
-          name="artists_featuring"
-          rows={2}
-          style={{ borderRadius: "2px" }}
-        />
-      </div>
-
       <div className="form-item upload">
-        <span style={{}}>Track Cover Image</span>
+        <span>Cover Image</span>
         <div className="image_upload_preview">
           {imageSet ? (
             <Image
@@ -430,7 +441,6 @@ export default function TrackForm(props) {
             </div>
           </label>
         </div>
-
         <Input
           id="imgFiles"
           style={{ visibility: "hidden" }}
@@ -439,7 +449,7 @@ export default function TrackForm(props) {
             setImageUrl(URL.createObjectURL(event.target.files[0]));
             setInputData((prevInputData) => ({
               ...prevInputData,
-              track_coverImage: event.target.files[0],
+              episode_coverImage: event.target.files[0],
             }));
             setImageSet(true);
           }}
@@ -447,7 +457,7 @@ export default function TrackForm(props) {
       </div>
 
       <div className="form-item upload">
-        <span>Track Audio File</span>
+        <span>Audio File</span>
         {audioSet ? (
           <label htmlFor="audioFiles" onClick={() => setAudioSet(false)}>
             <div className="upload_label audio">
@@ -491,7 +501,7 @@ export default function TrackForm(props) {
             setAudioSet(true);
             setInputData((prevInputData) => ({
               ...prevInputData,
-              track_audioFile: event.target.files[0],
+              episode_audioFile: event.target.files[0],
             }));
           }}
         />

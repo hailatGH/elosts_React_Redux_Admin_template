@@ -9,7 +9,7 @@ import {
   TrackTable,
   MediaPageStartCard,
   FormModel,
-} from "./components";
+} from "../../components";
 
 export default function Tracks() {
   const [open, setOpen] = useState(false);
@@ -30,7 +30,7 @@ export default function Tracks() {
           <NavLink to="/music">Music</NavLink>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <NavLink to="/tracks">Track</NavLink>
+          <NavLink to="/music/tracks">Track</NavLink>
         </Breadcrumb.Item>
       </Breadcrumb>
 

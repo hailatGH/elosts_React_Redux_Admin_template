@@ -49,20 +49,25 @@ export const SidebarData = [
       {
         key: 31,
         subMenu_link_name: "Hosts",
-        subMenu_link_route: "/podcast/podcastHosts",
+        subMenu_link_route: "/podcast/hosts",
       },
       {
         key: 32,
+        subMenu_link_name: "Category",
+        subMenu_link_route: "/podcast/categories",
+      },
+      {
+        key: 33,
         subMenu_link_name: "Podcasts",
         subMenu_link_route: "/podcast/podcasts",
       },
       {
-        key: 33,
+        key: 34,
         subMenu_link_name: "Seasons",
         subMenu_link_route: "/podcast/seasons",
       },
       {
-        key: 34,
+        key: 35,
         subMenu_link_name: "Episodes",
         subMenu_link_route: "/podcast/episodes",
       },
@@ -77,11 +82,6 @@ export const SidebarData = [
     subMenu: [
       {
         key: 41,
-        subMenu_link_name: "Hosts",
-        subMenu_link_route: "/radio/radioHosts",
-      },
-      {
-        key: 42,
         subMenu_link_name: "Stations",
         subMenu_link_route: "/radio/stations",
       },

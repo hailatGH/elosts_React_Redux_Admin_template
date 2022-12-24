@@ -1,25 +1,25 @@
 import { useState } from "react";
 import axios from "axios";
-import { Input, InputNumber, Checkbox, DatePicker, Button, Image } from "antd";
+import { Input, InputNumber, Checkbox, Button, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function ArtistForm(props) {
+export default function HostForm(props) {
   const { TextArea } = Input;
   const [imageSet, setImageSet] = useState();
   const [imageUrl, setImageUrl] = useState();
 
   const [inputData, setInputData] = useState(() => {
     return {
-      artist_name: "",
-      artist_title: "",
-      artist_FUI: "",
-      artist_rating: null,
-      artist_status: false,
-      artist_description: "",
-      artist_releaseDate: null,
-      artist_profileImage: null,
+      host_name: "",
+      host_title: "",
+      host_rating: null,
+      host_status: false,
+      host_description: "",
+      host_profileImage: null,
+      host_FUI: "",
+      encoder_FUI: "",
     };
   });
 
@@ -40,58 +40,60 @@ export default function ArtistForm(props) {
 
   function cleanUp() {
     setInputData({
-      artist_name: "",
-      artist_title: "",
-      artist_FUI: "",
-      artist_rating: null,
-      artist_status: false,
-      artist_description: "",
-      artist_releaseDate: null,
-      artist_profileImage: null,
+      host_name: "",
+      host_title: "",
+      host_rating: null,
+      host_status: false,
+      host_description: "",
+      host_profileImage: null,
+      host_FUI: "",
+      encoder_FUI: "",
     });
     setImageSet(false);
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-    const url = "https://music-service-vdzflryflq-ew.a.run.app/webApp/artist";
+    console.log(inputData);
+    // const url =
+    //   "https://podcast-service.calmgrass-743c6f7f.francecentral.azurecontainerapps.io/webApp/host";
 
-    const formData = new FormData();
-    for (let [key, value] of Object.entries(inputData)) {
-      formData.append(key, value);
-    }
+    // const formData = new FormData();
+    // for (let [key, value] of Object.entries(inputData)) {
+    //   formData.append(key, value);
+    // }
 
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
+    // const config = {
+    //   headers: {
+    //     "content-type": "multipart/form-data",
+    //   },
+    // };
 
-    axios
-      .post(url, formData, config)
-      .then((response) => {
-        response.status === 201
-          ? notify("success", `Creating ${inputData.artist_name} succeed!`)
-          : notify("error", `Creating ${inputData.artist_name} failed!`);
-        props.closeModal();
-        cleanUp();
-      })
-      .catch((response) => {
-        notify("error", `Creating ${inputData.artist_name} failed!`);
-        props.closeModal();
-        cleanUp();
-      });
+    // axios
+    //   .post(url, formData, config)
+    //   .then((response) => {
+    //     response.status === 201
+    //       ? notify("success", `Creating ${inputData.host_name} succeed!`)
+    //       : notify("error", `Creating ${inputData.host_name} failed!`);
+    //     props.closeModal();
+    //     cleanUp();
+    //   })
+    //   .catch((response) => {
+    //     notify("error", `Creating ${inputData.host_name} failed!`);
+    //     props.closeModal();
+    //     cleanUp();
+    //   });
   }
 
   return (
-    <div className="form artist">
+    <div className="form">
       <div className="form-item">
         <Input
           type="text"
-          placeholder="Artist Name"
+          placeholder="Name"
           onChange={() => handleChange(event)}
-          name="artist_name"
-          value={inputData.artist_name}
+          name="host_name"
+          value={inputData.host_name}
           style={{ borderRadius: "2px", height: "40px" }}
         />
       </div>
@@ -99,10 +101,10 @@ export default function ArtistForm(props) {
       <div className="form-item">
         <Input
           type="text"
-          placeholder="Artist Title"
+          placeholder="Title"
           onChange={() => handleChange(event)}
-          name="artist_title"
-          value={inputData.artist_title}
+          name="host_title"
+          value={inputData.host_title}
           style={{ borderRadius: "2px", height: "40px" }}
         />
       </div>
@@ -110,10 +112,10 @@ export default function ArtistForm(props) {
       <div className="form-item">
         <Input
           type="text"
-          placeholder="Artist ID"
+          placeholder="ID"
           onChange={() => handleChange(event)}
-          name="artist_FUI"
-          value={inputData.artist_FUI}
+          name="host_FUI"
+          value={inputData.host_FUI}
           style={{ borderRadius: "2px", height: "40px" }}
         />
       </div>
@@ -121,15 +123,15 @@ export default function ArtistForm(props) {
       <div className="form-item">
         <InputNumber
           type="number"
-          placeholder="Artist Rating"
+          placeholder="Rating"
           onChange={(value) =>
             setInputData((prevInputData) => ({
               ...prevInputData,
-              artist_rating: value,
+              host_rating: value,
             }))
           }
-          name="artist_rating"
-          value={inputData.artist_rating}
+          name="host_rating"
+          value={inputData.host_rating}
           min={0}
           max={5}
           style={{
@@ -143,57 +145,43 @@ export default function ArtistForm(props) {
       <div className="form-item">
         <Checkbox
           type="checkbox"
-          id="artist_status"
-          checked={inputData.artist_status}
+          id="host_status"
+          checked={inputData.host_status}
           onChange={() => handleChange(event)}
-          name="artist_status"
+          name="host_status"
           style={{ opacity: "0.7" }}
         >
-          Artist Status
+          Status
         </Checkbox>
       </div>
 
       <div className="form-item">
-        <DatePicker
-          type="date"
-          placement="bottomLeft"
-          onChange={(date, dateString) =>
-            setInputData((prevInputData) => ({
-              ...prevInputData,
-              artist_releaseDate: dateString,
-            }))
-          }
-          name="artist_releaseDate"
-          date={inputData.artist_releaseDate}
-          placeholder="Artist Release Date"
-          style={{ borderRadius: "2px" }}
-        />
-      </div>
-
-      <div className="form-item">
         <TextArea
-          placeholder="Artist Description"
-          value={inputData.artist_description}
+          placeholder="Description"
+          value={inputData.host_description}
           onChange={() => handleChange(event)}
-          name="artist_description"
+          name="host_description"
           rows={4}
           style={{ borderRadius: "2px" }}
         />
       </div>
 
       <div className="form-item upload">
-        <span>Artist Profile Picture</span>
-        {imageSet ? (
-          <Image
-            width={200}
-            height={100}
-            style={{ borderRadius: "4px" }}
-            src={imageUrl}
-            preview={false}
-            onClick={() => setImageSet(false)}
-          />
-        ) : (
-          <label htmlFor="files">
+        <span>Profile Picture</span>
+        <div className="image_upload_preview">
+          {imageSet ? (
+            <Image
+              width={100}
+              height={100}
+              src={imageUrl}
+              preview={false}
+              onClick={() => setImageSet(false)}
+              style={{ borderRadius: "4px" }}
+            />
+          ) : (
+            ""
+          )}
+          <label htmlFor="imgFiles">
             <div className="upload_label">
               <PlusOutlined />
               <div
@@ -207,9 +195,9 @@ export default function ArtistForm(props) {
               </div>
             </div>
           </label>
-        )}
+        </div>
         <Input
-          id="files"
+          id="imgFiles"
           style={{ visibility: "hidden" }}
           type="file"
           onChange={(event) => {
@@ -217,7 +205,7 @@ export default function ArtistForm(props) {
             setImageUrl(URL.createObjectURL(event.target.files[0]));
             setInputData((prevInputData) => ({
               ...prevInputData,
-              artist_profileImage: event.target.files[0],
+              host_profileImage: event.target.files[0],
             }));
           }}
         />

@@ -1,5 +1,5 @@
-import { Modal, Button } from "antd";
-import { ArtistForm } from "../components";
+import { Modal } from "antd";
+
 export default function FormModel(props) {
   return (
     <Modal

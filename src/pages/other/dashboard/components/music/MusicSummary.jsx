@@ -4,7 +4,7 @@ import {
   AlbumSummary,
   GenreSummary,
   TrackSummary,
-} from "../../../components";
+} from "../../components";
 
 export default function MusicSummary() {
   return (

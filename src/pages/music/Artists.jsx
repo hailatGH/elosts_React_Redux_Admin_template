@@ -9,7 +9,7 @@ import {
   ArtistTable,
   MediaPageStartCard,
   FormModel,
-} from "./components";
+} from "../../components";
 
 export default function Artists() {
   const [open, setOpen] = useState(false);
@@ -30,7 +30,7 @@ export default function Artists() {
           <NavLink to="/music">Music</NavLink>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <NavLink to="/artists">Artist</NavLink>
+          <NavLink to="/music/artists">Artist</NavLink>
         </Breadcrumb.Item>
       </Breadcrumb>
 

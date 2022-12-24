@@ -8,13 +8,13 @@ export { default as Tracks } from "./music/Tracks";
 // Podcast
 export { default as Podcast } from "./podcast/Podcast";
 export { default as Episodes } from "./podcast/Episodes";
-export { default as PodcastHosts } from "./podcast/PodcastHosts";
+export { default as Hosts } from "./podcast/Hosts";
+export { default as Category } from "./podcast/Category";
 export { default as Podcasts } from "./podcast/Podcasts";
 export { default as Seasons } from "./podcast/Seasons";
 
 // Radio
 export { default as Radio } from "./radio/Radio";
-export { default as RadioHosts } from "./radio/RadioHosts";
 export { default as Stations } from "./radio/Stations";
 
 // Others

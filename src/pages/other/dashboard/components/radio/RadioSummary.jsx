@@ -1,5 +1,5 @@
 import { Tabs } from "antd";
-import { RadioHostSummary, StationSummary } from "../../../components";
+import { RadioHostSummary, StationSummary } from "../../components";
 
 export default function MusicSummary() {
   return (

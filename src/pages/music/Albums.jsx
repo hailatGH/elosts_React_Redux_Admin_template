@@ -9,7 +9,7 @@ import {
   AlbumTable,
   MediaPageStartCard,
   FormModel,
-} from "./components";
+} from "../../components";
 
 export default function Albums() {
   const [open, setOpen] = useState(false);
@@ -30,7 +30,7 @@ export default function Albums() {
           <NavLink to="/music">Music</NavLink>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <NavLink to="/albums">Album</NavLink>
+          <NavLink to="/music/albums">Album</NavLink>
         </Breadcrumb.Item>
       </Breadcrumb>
 

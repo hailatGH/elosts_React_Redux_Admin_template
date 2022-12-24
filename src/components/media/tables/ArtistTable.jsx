@@ -1,28 +1,20 @@
 import { useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Input,
-  Space,
-  Table,
-  Rate,
-  Popconfirm,
-  notification,
-} from "antd";
+import { Input, Table, Rate, Popconfirm, notification } from "antd";
 import Highlighter from "react-highlight-words";
 
 const data = [
   {
     key: "1",
-    track_coverImage:
-      "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Tracks_Cover_Images/Libe%20Sew_Media_Files/Tracks_Cover_Images/Libe_Sew_Yene_Zema.jpg",
-    track_name: "Kal Bekal",
-    track_price: 50,
-    track_status: true,
-    track_viewcount: 0,
-    track_rating: 3.5,
+    artist_profileImage:
+      "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Artists_Profile_Images/Bisrat_Surafel_Bisrat_Surafel.jpg",
+    artist_name: "Bisrat Surael",
+    artist_status: true,
+    artist_viewcount: 0,
+    artist_rating: 3.5,
+    artist_FUI: "gZkd8CJAxESJpJFmXRLnU0IFkhE3",
     encoder_FUI: "0Yi6yM0YmDWd55AfF0cYea2iXsc2",
-    track_description: "Ethiopian Artist Bisre",
+    artist_description: "Ethiopian Artist Bisre",
   },
 ];
 
@@ -101,36 +93,30 @@ export default function ArtistTable(props) {
   const columns = [
     {
       title: "Image",
-      dataIndex: "track_coverImage",
-      key: "track_coverImage",
+      dataIndex: "artist_profileImage",
+      key: "artist_profileImage",
       width: "7%",
       fixed: "left",
-      render: (track_coverImage) => (
-        <img src={track_coverImage} className="tabe_images" />
+      render: (artist_profileImage) => (
+        <img src={artist_profileImage} className="tabe_images" />
       ),
     },
     {
-      title: "Track Name",
-      dataIndex: "track_name",
-      key: "track_name",
+      title: "Artist Name",
+      dataIndex: "artist_name",
+      key: "artist_name",
       width: "20%",
-      ...getColumnSearchProps("track_name"),
-      sorter: (a, b) => a.track_name.length - b.track_name.length,
+      ...getColumnSearchProps("artist_name"),
+      sorter: (a, b) => a.artist_name.length - b.artist_name.length,
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Price",
-      dataIndex: "track_price",
-      key: "track_price",
-      width: "10%",
-    },
-    {
       title: "Status",
-      dataIndex: "track_status",
-      key: "track_status",
+      dataIndex: "artist_status",
+      key: "artist_status",
       width: "7%",
-      render: (track_status) =>
-        track_status ? (
+      render: (artist_status) =>
+        artist_status ? (
           <i className="bx bxs-check-circle"></i>
         ) : (
           <i className="bx bxs-x-circle"></i>
@@ -138,18 +124,24 @@ export default function ArtistTable(props) {
     },
     {
       title: "View",
-      dataIndex: "track_viewcount",
-      key: "track_viewcount",
+      dataIndex: "artist_viewcount",
+      key: "artist_viewcount",
       width: "10%",
     },
     {
       title: "Rating",
-      dataIndex: "track_rating",
-      key: "track_rating",
+      dataIndex: "artist_rating",
+      key: "artist_rating",
       width: "17%",
-      render: (track_rating) => (
-        <Rate disabled allowHalf value={track_rating} />
+      render: (artist_rating) => (
+        <Rate disabled allowHalf value={artist_rating} />
       ),
+    },
+    {
+      title: "Artist ID",
+      dataIndex: "artist_FUI",
+      key: "artist_FUI",
+      width: "30%",
     },
     {
       title: "Encoder ID",
@@ -195,7 +187,7 @@ export default function ArtistTable(props) {
               margin: 0,
             }}
           >
-            {record.track_description}
+            {record.artist_description}
           </p>
         ),
         rowExpandable: (record) => record.name !== "Not Expandable",
