@@ -43,9 +43,9 @@ export default function Seasons() {
         form={<SeasonForm closeModal={closeModal} />}
       />
 
-      <div className="table_wraper">
+      {/* <div className="table_wraper">
         <AlbumTable showModal={showModal} name="Season" />
-      </div>
+      </div> */}
 
       <ToastContainer
         autoClose={3000}

@@ -43,9 +43,9 @@ export default function Geners() {
         form={<GenreForm closeModal={closeModal} />}
       />
 
-      <div className="table_wraper">
+      {/* <div className="table_wraper">
         <GenreTable showModal={showModal} name="Genre" />
-      </div>
+      </div> */}
 
       <ToastContainer
         autoClose={3000}

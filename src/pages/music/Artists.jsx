@@ -43,9 +43,9 @@ export default function Artists() {
         form={<ArtistForm closeModal={closeModal} />}
       />
 
-      <div className="table_wraper">
+      {/* <div className="table_wraper">
         <ArtistTable showModal={showModal} name="Artist" />
-      </div>
+      </div> */}
 
       <ToastContainer
         autoClose={3000}

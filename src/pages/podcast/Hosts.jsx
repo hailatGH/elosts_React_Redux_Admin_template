@@ -43,9 +43,9 @@ export default function Hosts() {
         form={<HostForm closeModal={closeModal} />}
       />
 
-      <div className="table_wraper">
+      {/* <div className="table_wraper">
         <ArtistTable showModal={showModal} name="Host" />
-      </div>
+      </div> */}
 
       <ToastContainer
         autoClose={3000}

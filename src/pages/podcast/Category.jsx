@@ -43,9 +43,9 @@ export default function Category() {
         form={<CategoryForm closeModal={closeModal} />}
       />
 
-      <div className="table_wraper">
+      {/* <div className="table_wraper">
         <GenreTable showModal={showModal} name="Category" />
-      </div>
+      </div> */}
 
       <ToastContainer
         autoClose={3000}

@@ -43,9 +43,9 @@ export default function Tracks() {
         form={<TrackForm closeModal={closeModal} />}
       />
 
-      <div className="table_wraper">
+      {/* <div className="table_wraper">
         <TrackTable showModal={showModal} name="Track" />
-      </div>
+      </div> */}
 
       <ToastContainer
         autoClose={3000}

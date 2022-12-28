@@ -43,9 +43,9 @@ export default function Podcasts() {
         form={<PodcastForm closeModal={closeModal} />}
       />
 
-      <div className="table_wraper">
+      {/* <div className="table_wraper">
         <AlbumTable showModal={showModal} name="Album" />
-      </div>
+      </div> */}
 
       <ToastContainer
         autoClose={3000}

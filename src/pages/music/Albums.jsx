@@ -43,9 +43,9 @@ export default function Albums() {
         form={<AlbumForm closeModal={closeModal} />}
       />
 
-      <div className="table_wraper">
+      {/* <div className="table_wraper">
         <AlbumTable showModal={showModal} name="Album" />
-      </div>
+      </div> */}
 
       <ToastContainer
         autoClose={3000}
