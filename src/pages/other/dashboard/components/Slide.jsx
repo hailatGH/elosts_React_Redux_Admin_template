@@ -8,6 +8,7 @@ const contentStyle = {
   lineHeight: "300px",
   textAlign: "center",
   background: "#364d79",
+  margin: "10px 0px 0px 0px",
 };
 
 export default function Slide() {

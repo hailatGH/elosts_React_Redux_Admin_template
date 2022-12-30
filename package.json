@@ -1,5 +1,5 @@
 {
-  "name": "elosts-react-redux-admin-template",
+  "name": "vite-project",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,12 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "antd": "^5.0.6",
-    "axios": "^1.2.1",
+    "@reduxjs/toolkit": "^1.9.1",
+    "antd": "^5.1.2",
+    "axios": "^1.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-highlight-words": "^0.18.0",
-    "react-router-dom": "^6.4.5",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "^6.6.1",
     "react-toastify": "^9.1.1",
     "recharts": "^2.2.0"
   },
