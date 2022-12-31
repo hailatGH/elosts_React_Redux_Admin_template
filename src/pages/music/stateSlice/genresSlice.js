@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 const URL = "https://music-service-vdzflryflq-ew.a.run.app/webApp/genre"
 
 const initialState = {
+    count: null,
     genres: [],
     status: 'idle', //'idle' | 'loading' | 'succeeded' | 'failed'
     error: null
@@ -16,9 +17,10 @@ const notify = (type, msg) => {
     if (type === "error") toast.error(msg);
   };
 
-export const fetchGenres = createAsyncThunk('genres/fetchGenres', async () => {
-    const response = await axios.get(URL)
-    return response.data.results
+export const fetchGenres = createAsyncThunk('genres/fetchGenres', async (pageNumber) => {
+    const page = pageNumber ? pageNumber : 1;
+    const response = await axios.get(`${URL}?page=${page}`)
+    return response.data
 })
 
 export const addNewGenre = createAsyncThunk('genres/addNewGenre', async (initialPost) => {
@@ -57,11 +59,12 @@ const genresSlice = createSlice({
             })
             .addCase(fetchGenres.fulfilled, (state, action) => {
                 state.status = 'succeeded'
-                const loadedGenres = action.payload.map(genre => {
+                const loadedGenres = action.payload.results.map(genre => {
                     genre.key = genre.id
                     return genre
                 })
                 state.genres.push(loadedGenres)
+                state.count = action.payload.count
             })
             .addCase(fetchGenres.rejected, (state, action) => {
                 state.status = 'failed'
@@ -71,6 +74,7 @@ const genresSlice = createSlice({
                 const loadedGenres = action.payload
                 loadedGenres.key = loadedGenres.id
                 state.genres[0].push(loadedGenres)
+                state.count += 1
                 notify("success", `Creating ${loadedGenres.genre_name} succeed!`);
             })
             .addCase(addNewGenre.rejected, (state, action) => {
@@ -81,6 +85,7 @@ const genresSlice = createSlice({
 })
 
 export const selectAllGenres = (state) => state.genres.genres[0]
+export const getGenresCount = (state) => state.genres.count
 export const getGenresStatus = (state) => state.genres.status
 export const getGenresError = (state) => state.genres.error
 export const { genreAdded } = genresSlice.actions

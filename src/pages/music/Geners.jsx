@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import {
   selectAllGenres,
+  getGenresCount,
   getGenresStatus,
   getGenresError,
   fetchGenres,
@@ -22,8 +23,14 @@ export default function Geners() {
   const dispatch = useDispatch();
 
   const genres = useSelector(selectAllGenres);
+  const genersCount = useSelector(getGenresCount);
   const genresStatus = useSelector(getGenresStatus);
   const genresError = useSelector(getGenresError);
+
+  const [pageNumber, setPageNumber] = useState(1);
+  const onPageNumberChange = (page) => {
+    setPageNumber(page);
+  };
 
   const [open, setOpen] = useState(false);
   const showModal = () => {
@@ -35,7 +42,7 @@ export default function Geners() {
 
   useEffect(() => {
     if (genresStatus === "idle") {
-      dispatch(fetchGenres());
+      dispatch(fetchGenres(pageNumber));
     }
   }, [genresStatus, dispatch]);
 
@@ -44,7 +51,13 @@ export default function Geners() {
     genresTable = "loading";
   } else if (genresStatus === "succeeded") {
     genresTable = (
-      <GenreTable showModal={showModal} name="Genre" data={genres} />
+      <GenreTable
+        showModal={showModal}
+        name="Genre"
+        data={genres}
+        genersCount={genersCount}
+        onPageNumberChange={onPageNumberChange}
+      />
     );
   } else if (genresStatus === "failed") {
     genresTable = <p>{genresError}</p>;

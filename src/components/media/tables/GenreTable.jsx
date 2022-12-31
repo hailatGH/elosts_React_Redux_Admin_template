@@ -3,9 +3,8 @@ import { SearchOutlined } from "@ant-design/icons";
 import { Input, Table, Rate, Popconfirm, notification } from "antd";
 import Highlighter from "react-highlight-words";
 
-export default function ArtistTable(props) {
+export default function GenreTable(props) {
   const text = `Are you sure you want to delete this ${props.name}?`;
-
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -171,7 +170,11 @@ export default function ArtistTable(props) {
         ),
         rowExpandable: (record) => record.name !== "Not Expandable",
       }}
-      pagination={{ defaultCurrent: 1, total: 15 }}
+      pagination={{
+        defaultCurrent: 1,
+        total: props.genersCount,
+        onChange: props.onPageNumberChange,
+      }}
       scroll={{
         y: 420,
         x: 1300,
