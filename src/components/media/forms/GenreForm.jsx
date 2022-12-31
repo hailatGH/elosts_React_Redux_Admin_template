@@ -1,11 +1,12 @@
 import { useState } from "react";
-import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addNewGenre } from "../../../pages/music/stateSlice/genresSlice";
 import { Input, InputNumber, Checkbox, Button, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function GenreForm(props) {
+  const dispatch = useDispatch();
+  const [addRequestStatus, setAddRequestStatus] = useState("idle");
   const { TextArea } = Input;
   const [imageSet, setImageSet] = useState();
   const [imageUrl, setImageUrl] = useState();
@@ -20,11 +21,6 @@ export default function GenreForm(props) {
       encoder_FUI: "",
     };
   });
-
-  const notify = (type, msg) => {
-    if (type === "success") toast.success(msg);
-    if (type === "error") toast.error(msg);
-  };
 
   function handleChange(event) {
     const { name, value, type, checked } = event.target;
@@ -50,34 +46,16 @@ export default function GenreForm(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(inputData);
-    // const url = "https://music-service-vdzflryflq-ew.a.run.app/webApp/genre";
-
-    // const formData = new FormData();
-    // for (let [key, value] of Object.entries(inputData)) {
-    //   formData.append(key, value);
-    // }
-
-    // const config = {
-    //   headers: {
-    //     "content-type": "multipart/form-data",
-    //   },
-    // };
-
-    // axios
-    //   .post(url, formData, config)
-    //   .then((response) => {
-    //     response.status === 201
-    //       ? notify("success", `Creating ${inputData.genre_name} succeed!`)
-    //       : notify("error", `Creating ${inputData.genre_name} failed!`);
-    //     props.closeModal();
-    //     cleanUp();
-    //   })
-    //   .catch((response) => {
-    //     notify("error", `Creating ${inputData.genre_name} failed!`);
-    //     props.closeModal();
-    //     cleanUp();
-    //   });
+    try {
+      setAddRequestStatus("pending");
+      dispatch(addNewGenre(inputData)).unwrap();
+    } catch (err) {
+      setAddRequestStatus("failed");
+    } finally {
+      setAddRequestStatus("idle");
+      props.closeModal();
+      cleanUp();
+    }
   }
 
   return (

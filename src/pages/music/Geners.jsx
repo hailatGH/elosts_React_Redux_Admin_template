@@ -1,9 +1,16 @@
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Breadcrumb } from "antd";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import {
+  selectAllGenres,
+  getGenresStatus,
+  getGenresError,
+  fetchGenres,
+} from "./stateSlice/genresSlice";
 import {
   GenreForm,
   GenreTable,
@@ -12,6 +19,12 @@ import {
 } from "../../components";
 
 export default function Geners() {
+  const dispatch = useDispatch();
+
+  const genres = useSelector(selectAllGenres);
+  const genresStatus = useSelector(getGenresStatus);
+  const genresError = useSelector(getGenresError);
+
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
@@ -20,8 +33,25 @@ export default function Geners() {
     setOpen(false);
   };
 
+  useEffect(() => {
+    if (genresStatus === "idle") {
+      dispatch(fetchGenres());
+    }
+  }, [genresStatus, dispatch]);
+
+  let genresTable = <h3>Something</h3>;
+  if (genresStatus === "loading") {
+    genresTable = "loading";
+  } else if (genresStatus === "succeeded") {
+    genresTable = (
+      <GenreTable showModal={showModal} name="Genre" data={genres} />
+    );
+  } else if (genresStatus === "failed") {
+    genresTable = <p>{genresError}</p>;
+  }
+
   return (
-    <div className="page_wraper">
+    <div className="page_wraper static">
       <Breadcrumb className="breadCrumb">
         <Breadcrumb.Item>
           <NavLink to="/">Home</NavLink>
@@ -43,9 +73,7 @@ export default function Geners() {
         form={<GenreForm closeModal={closeModal} />}
       />
 
-      {/* <div className="table_wraper">
-        <GenreTable showModal={showModal} name="Genre" />
-      </div> */}
+      <div className="table_wraper">{genresTable}</div>
 
       <ToastContainer
         autoClose={3000}

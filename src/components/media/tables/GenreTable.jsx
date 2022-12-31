@@ -1,29 +1,7 @@
 import { useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Input,
-  Space,
-  Table,
-  Rate,
-  Popconfirm,
-  notification,
-} from "antd";
+import { Input, Table, Rate, Popconfirm, notification } from "antd";
 import Highlighter from "react-highlight-words";
-
-const data = [
-  {
-    key: "1",
-    genre_coverImage:
-      "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Genres_Cover_Images/Reggae_reggae.png",
-    genre_name: "Reggae",
-    genre_status: true,
-    genre_viewcount: 0,
-    genre_rating: 3.5,
-    encoder_FUI: "0Yi6yM0YmDWd55AfF0cYea2iXsc2",
-    genre_description: "Ethiopian Artist Bisre",
-  },
-];
 
 export default function ArtistTable(props) {
   const text = `Are you sure you want to delete this ${props.name}?`;
@@ -179,7 +157,7 @@ export default function ArtistTable(props) {
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={props.data}
       size="small"
       expandable={{
         expandedRowRender: (record) => (
@@ -193,9 +171,9 @@ export default function ArtistTable(props) {
         ),
         rowExpandable: (record) => record.name !== "Not Expandable",
       }}
-      pagination={{ defaultCurrent: 1, total: 500 }}
+      pagination={{ defaultCurrent: 1, total: 15 }}
       scroll={{
-        y: 350,
+        y: 420,
         x: 1300,
       }}
     />

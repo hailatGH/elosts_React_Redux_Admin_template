@@ -1,7 +1,11 @@
 import { Card, Button } from "antd";
 export default function MediaPageStartCard(props) {
   return (
-    <Card className="page_card" size="small" style={{ marginTop: "10px" }}>
+    <Card
+      className="page_card"
+      size="small"
+      style={{ marginTop: "10px", height: "60px" }}
+    >
       <div
         className="music"
         style={{ display: "flex", justifyContent: "space-between" }}
