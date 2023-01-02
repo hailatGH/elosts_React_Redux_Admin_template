@@ -27,11 +27,6 @@ export default function Geners() {
   const genresStatus = useSelector(getGenresStatus);
   const genresError = useSelector(getGenresError);
 
-  const [pageNumber, setPageNumber] = useState(1);
-  const onPageNumberChange = (page) => {
-    setPageNumber(page);
-  };
-
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
@@ -40,11 +35,14 @@ export default function Geners() {
     setOpen(false);
   };
 
+  const [pageNumber, setPageNumber] = useState(1);
+  const onPageNumberChange = (page) => {
+    setPageNumber(page);
+  };
+
   useEffect(() => {
-    if (genresStatus === "idle") {
-      dispatch(fetchGenres(pageNumber));
-    }
-  }, [genresStatus, dispatch]);
+    dispatch(fetchGenres(pageNumber));
+  }, [dispatch, pageNumber]);
 
   let genresTable = <h3>Something</h3>;
   if (genresStatus === "loading") {
@@ -53,6 +51,7 @@ export default function Geners() {
     genresTable = (
       <GenreTable
         showModal={showModal}
+        current={pageNumber}
         name="Genre"
         data={genres}
         genersCount={genersCount}

@@ -1,9 +1,17 @@
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Breadcrumb } from "antd";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import {
+  selectAllAlbums,
+  getAlbumsCount,
+  getAlbumsStatus,
+  getAlbumsError,
+  fetchAlbums,
+} from "./stateSlice/albumsSlice";
 import {
   AlbumForm,
   AlbumTable,
@@ -12,6 +20,13 @@ import {
 } from "../../components";
 
 export default function Albums() {
+  const dispatch = useDispatch();
+
+  const albums = useSelector(selectAllAlbums);
+  const albumsCount = useSelector(getAlbumsCount);
+  const albumsStatus = useSelector(getAlbumsStatus);
+  const albumsError = useSelector(getAlbumsError);
+
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
@@ -20,8 +35,35 @@ export default function Albums() {
     setOpen(false);
   };
 
+  const [pageNumber, setPageNumber] = useState(1);
+  const onPageNumberChange = (page) => {
+    setPageNumber(page);
+  };
+
+  useEffect(() => {
+    dispatch(fetchAlbums(pageNumber));
+  }, [dispatch, pageNumber]);
+
+  let albumsTable = <h3>Something</h3>;
+  if (albumsStatus === "loading") {
+    albumsTable = "loading";
+  } else if (albumsStatus === "succeeded") {
+    albumsTable = (
+      <AlbumTable
+        showModal={showModal}
+        current={pageNumber}
+        name="Album"
+        data={albums}
+        albumsCount={albumsCount}
+        onPageNumberChange={onPageNumberChange}
+      />
+    );
+  } else if (albumsStatus === "failed") {
+    albumsTable = <p>{albumsError}</p>;
+  }
+
   return (
-    <div className="page_wraper">
+    <div className="page_wraper static">
       <Breadcrumb className="breadCrumb">
         <Breadcrumb.Item>
           <NavLink to="/">Home</NavLink>
@@ -43,9 +85,7 @@ export default function Albums() {
         form={<AlbumForm closeModal={closeModal} />}
       />
 
-      {/* <div className="table_wraper">
-        <AlbumTable showModal={showModal} name="Album" />
-      </div> */}
+      <div className="table_wraper">{albumsTable}</div>
 
       <ToastContainer
         autoClose={3000}

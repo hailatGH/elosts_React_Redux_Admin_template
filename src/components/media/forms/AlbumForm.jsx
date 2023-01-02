@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { addNewAlbum } from "../../../pages/music/stateSlice/albumsSlice";
 import axios from "axios";
 import {
   Input,
@@ -10,14 +12,15 @@ import {
   Select,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function AlbumForm(props) {
+  const dispatch = useDispatch();
+  const [addRequestStatus, setAddRequestStatus] = useState("idle");
   const { TextArea } = Input;
   const [imageSet, setImageSet] = useState();
   const [imageUrl, setImageUrl] = useState();
   const [listArtist, setListArtist] = useState([]);
+
   const [inputData, setInputData] = useState(() => {
     return {
       album_name: "",
@@ -52,11 +55,6 @@ export default function AlbumForm(props) {
       });
   }
 
-  const notify = (type, msg) => {
-    if (type === "success") toast.success(msg);
-    if (type === "error") toast.error(msg);
-  };
-
   function handleChange(event) {
     const { name, value, type, checked } = event.target;
     setInputData((prevInputData) => {
@@ -84,7 +82,16 @@ export default function AlbumForm(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(inputData);
+    try {
+      setAddRequestStatus("pending");
+      dispatch(addNewAlbum(inputData)).unwrap();
+    } catch (err) {
+      setAddRequestStatus("failed");
+    } finally {
+      setAddRequestStatus("idle");
+      props.closeModal();
+      cleanUp();
+    }
     // const url = "https://music-service-vdzflryflq-ew.a.run.app/webApp/album";
 
     // const formData = new FormData();
@@ -112,6 +119,17 @@ export default function AlbumForm(props) {
     //     props.closeModal();
     //     cleanUp();
     //   });
+  }
+
+  function handleImageUpload(event) {
+    setImageUrl(URL.createObjectURL(event.target.files[0]));
+    setInputData((prevInputData) => {
+      return {
+        ...prevInputData,
+        album_coverImage: event.target.files[0],
+      };
+    });
+    setImageSet(true);
   }
 
   return (
@@ -257,14 +275,13 @@ export default function AlbumForm(props) {
               width={100}
               height={100}
               src={imageUrl}
-              preview={false}
-              onClick={() => setImageSet(false)}
+              preview={true}
               style={{ borderRadius: "4px" }}
             />
           ) : (
             ""
           )}
-          <label htmlFor="files">
+          <label htmlFor="imgFiles">
             <div className="upload_label">
               <PlusOutlined />
               <div
@@ -279,19 +296,11 @@ export default function AlbumForm(props) {
             </div>
           </label>
         </div>
-
         <Input
-          id="files"
+          id="imgFiles"
           style={{ visibility: "hidden" }}
           type="file"
-          onChange={(event) => {
-            setImageSet(true);
-            setImageUrl(URL.createObjectURL(event.target.files[0]));
-            setInputData((prevInputData) => ({
-              ...prevInputData,
-              album_coverImage: event.target.files[0],
-            }));
-          }}
+          onChange={(event) => handleImageUpload(event)}
         />
       </div>
 

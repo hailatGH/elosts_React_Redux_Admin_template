@@ -18,8 +18,7 @@ const notify = (type, msg) => {
   };
 
 export const fetchGenres = createAsyncThunk('genres/fetchGenres', async (pageNumber) => {
-    const page = pageNumber ? pageNumber : 1;
-    const response = await axios.get(`${URL}?page=${page}`)
+    const response = await axios.get(`${URL}?page=${pageNumber}`)
     return response.data
 })
 
@@ -63,6 +62,7 @@ const genresSlice = createSlice({
                     genre.key = genre.id
                     return genre
                 })
+                state.genres = []
                 state.genres.push(loadedGenres)
                 state.count = action.payload.count
             })
@@ -78,7 +78,6 @@ const genresSlice = createSlice({
                 notify("success", `Creating ${loadedGenres.genre_name} succeed!`);
             })
             .addCase(addNewGenre.rejected, (state, action) => {
-                const loadedGenres = action.payload
                 notify("error", `Failed creating the genre!`);
             })
     }

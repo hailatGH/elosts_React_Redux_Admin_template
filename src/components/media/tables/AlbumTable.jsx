@@ -3,24 +3,8 @@ import { SearchOutlined } from "@ant-design/icons";
 import { Input, Table, Rate, Popconfirm, notification } from "antd";
 import Highlighter from "react-highlight-words";
 
-const data = [
-  {
-    key: "1",
-    album_coverImage:
-      "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Albums_Cover_Images/Kal_Bekal_kalbekalcoverimage.jpeg",
-    album_name: "Kal Bekal",
-    album_price: 50,
-    album_status: true,
-    album_viewcount: 0,
-    album_rating: 3.5,
-    encoder_FUI: "0Yi6yM0YmDWd55AfF0cYea2iXsc2",
-    album_description: "Ethiopian Artist Bisre",
-  },
-];
-
-export default function ArtistTable(props) {
+export default function AlbumTable(props) {
   const text = `Are you sure you want to delete this ${props.name}?`;
-
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
@@ -178,7 +162,7 @@ export default function ArtistTable(props) {
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={props.data}
       size="small"
       expandable={{
         expandedRowRender: (record) => (
@@ -192,9 +176,18 @@ export default function ArtistTable(props) {
         ),
         rowExpandable: (record) => record.name !== "Not Expandable",
       }}
-      pagination={{ defaultCurrent: 1, total: 500 }}
+      pagination={{
+        size: "small",
+        hideOnSinglePage: true,
+        showSizeChanger: false,
+        current: props.current,
+        defaultCurrent: 1,
+        defaultPageSize: 10,
+        total: props.albumsCount,
+        onChange: props.onPageNumberChange,
+      }}
       scroll={{
-        y: 350,
+        y: 420,
         x: 1300,
       }}
     />

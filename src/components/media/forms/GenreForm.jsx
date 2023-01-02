@@ -7,9 +7,8 @@ import { PlusOutlined } from "@ant-design/icons";
 export default function GenreForm(props) {
   const dispatch = useDispatch();
   const [addRequestStatus, setAddRequestStatus] = useState("idle");
-  const { TextArea } = Input;
-  const [imageSet, setImageSet] = useState(false);
   const [imageUrl, setImageUrl] = useState();
+  const { TextArea } = Input;
 
   const [inputData, setInputData] = useState(() => {
     return {
@@ -41,7 +40,6 @@ export default function GenreForm(props) {
       genre_coverImage: null,
       encoder_FUI: "",
     });
-    setImageSet(false);
   }
 
   function handleSubmit(event) {
@@ -66,7 +64,6 @@ export default function GenreForm(props) {
         genre_coverImage: event.target.files[0],
       };
     });
-    setImageSet(true);
   }
 
   return (
@@ -131,12 +128,12 @@ export default function GenreForm(props) {
       <div className="form-item upload">
         <span>Cover Image</span>
         <div className="image_upload_preview">
-          {imageSet ? (
+          {imageUrl ? (
             <Image
               width={100}
               height={100}
               src={imageUrl}
-              preview={false}
+              preview={true}
               style={{ borderRadius: "4px" }}
             />
           ) : (
