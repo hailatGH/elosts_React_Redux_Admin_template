@@ -1,13 +1,38 @@
+import { useDispatch, useSelector } from "react-redux";
 import { useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import { Input, Table, Rate, Popconfirm, notification } from "antd";
+import { Input, Table, Rate, Popconfirm } from "antd";
 import Highlighter from "react-highlight-words";
 
+import {
+  deleteGenre,
+  selectAllGenres,
+  selectGenreById,
+} from "../../../pages/music/stateSlice/genresSlice";
+
 export default function GenreTable(props) {
+  const dispatch = useDispatch();
+
   const text = `Are you sure you want to delete this ${props.name}?`;
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+
+  const [requestStatus, setRequestStatus] = useState("idle");
+  const [genreId, setGenreId] = useState();
+
+  const genre = useSelector((state) => selectGenreById(state, Number(genreId)));
+
+  const onDeleteGenreClicked = () => {
+    try {
+      setRequestStatus("pending");
+      dispatch(deleteGenre(genre)).unwrap();
+    } catch (err) {
+      console.error("Failed to delete the post", err);
+    } finally {
+      setRequestStatus("idle");
+    }
+  };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -66,13 +91,6 @@ export default function GenreTable(props) {
         text
       ),
   });
-
-  const openNotification = () => {
-    notification.info({
-      message: "Notification",
-      description: "Description",
-    });
-  };
 
   const columns = [
     {
@@ -139,12 +157,14 @@ export default function GenreTable(props) {
           </div>
           <div
             className="action_delete"
-            onClick={(event) => console.log(data.id)}
+            onClick={() => {
+              setGenreId(data.id);
+            }}
           >
             <Popconfirm
               placement="left"
               title={text}
-              onConfirm={openNotification}
+              onConfirm={onDeleteGenreClicked}
               okText="Yes"
               cancelText="No"
             >

@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import {
   selectAllGenres,
+  // selectGenreById,
   getGenresCount,
   getGenresStatus,
   getGenresError,
@@ -22,11 +23,6 @@ import {
 export default function Geners() {
   const dispatch = useDispatch();
 
-  const genres = useSelector(selectAllGenres);
-  const genersCount = useSelector(getGenresCount);
-  const genresStatus = useSelector(getGenresStatus);
-  const genresError = useSelector(getGenresError);
-
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
@@ -39,6 +35,12 @@ export default function Geners() {
   const onPageNumberChange = (page) => {
     setPageNumber(page);
   };
+
+  // const genre = useSelector((state) => selectGenreById(state, Number(postId)));
+  const genres = useSelector(selectAllGenres);
+  const genersCount = useSelector(getGenresCount);
+  const genresStatus = useSelector(getGenresStatus);
+  const genresError = useSelector(getGenresError);
 
   useEffect(() => {
     dispatch(fetchGenres(pageNumber));

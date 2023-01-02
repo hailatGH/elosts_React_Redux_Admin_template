@@ -22,14 +22,41 @@ export const fetchGenres = createAsyncThunk('genres/fetchGenres', async (pageNum
     return response.data
 })
 
-export const addNewGenre = createAsyncThunk('genres/addNewGenre', async (initialPost) => {
+export const addNewGenre = createAsyncThunk('genres/addNewGenre', async (initialGenre) => {
     const config = {
           headers: {
             "content-type": "multipart/form-data",
           },
         };
-    const response = await axios.post(URL, initialPost, config)
+    const response = await axios.post(URL, initialGenre, config)
     return response.data
+})
+
+// export const updateGenre = createAsyncThunk('genres/updateGenre', async (initialGenre) => {
+//     const { id } = initialGenre;
+//     const config = {
+//         headers: {
+//           "content-type": "multipart/form-data",
+//         },
+//       };
+//     try {
+//         const response = await axios.put(`${URL}/${id}`, initialGenre, config)
+//         return response.data
+//     } catch (err) {
+//         return err.message;
+//     }
+// })
+
+export const deleteGenre = createAsyncThunk('genres/deleteGenre', async (initialGenre) => {
+    const { id } = initialGenre;
+    try {
+        const response = await axios.delete(`${URL}/${id}`)
+        if (response?.status === 200) return initialGenre;
+        if (response?.status === 204) return initialGenre;
+        return response?.status;
+    } catch (err) {
+        return err.message;
+    }
 })
 
 const genresSlice = createSlice({
@@ -80,10 +107,22 @@ const genresSlice = createSlice({
             .addCase(addNewGenre.rejected, (state, action) => {
                 notify("error", `Failed creating the genre!`);
             })
+            .addCase(deleteGenre.fulfilled, (state, action) => {
+                if (!action.payload?.id) {
+                    notify("error", `Failed deleting the genre!`);
+                    return;
+                }
+                const { id } = action.payload;
+                const genres = state.genres[0].filter(genre => genre.id !== id);
+                state.genres[0] = genres;
+                notify("success", `Succeed deleting the genre!`);
+            })
     }
 })
 
 export const selectAllGenres = (state) => state.genres.genres[0]
+export const selectGenreById = (state, genreId) =>
+    state.genres.genres[0].find(genre => genre.id === genreId);
 export const getGenresCount = (state) => state.genres.count
 export const getGenresStatus = (state) => state.genres.status
 export const getGenresError = (state) => state.genres.error
