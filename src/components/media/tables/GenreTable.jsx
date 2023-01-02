@@ -132,12 +132,15 @@ export default function GenreTable(props) {
       key: "action",
       width: "10%",
       fixed: "right",
-      render: () => (
+      render: (data) => (
         <div className="table_action">
           <div className="action_edit">
             <i className="bx bxs-edit" onClick={props.showModal}></i>
           </div>
-          <div className="action_delete">
+          <div
+            className="action_delete"
+            onClick={(event) => console.log(data.id)}
+          >
             <Popconfirm
               placement="left"
               title={text}
