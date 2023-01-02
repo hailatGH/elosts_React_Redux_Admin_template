@@ -40,6 +40,7 @@ export default function GenreForm(props) {
       genre_coverImage: null,
       encoder_FUI: "",
     });
+    setImageUrl(null);
   }
 
   function handleSubmit(event) {
