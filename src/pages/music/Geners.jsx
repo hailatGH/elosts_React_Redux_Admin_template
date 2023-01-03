@@ -7,7 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 import {
   selectAllGenres,
-  // selectGenreById,
   getGenresCount,
   getGenresStatus,
   getGenresError,
@@ -15,6 +14,7 @@ import {
 } from "./stateSlice/genresSlice";
 import {
   GenreForm,
+  GenreUpdateForm,
   GenreTable,
   MediaPageStartCard,
   FormModel,
@@ -31,12 +31,21 @@ export default function Geners() {
     setOpen(false);
   };
 
+  const [genre, setGenre] = useState();
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const showEditModal = (data) => {
+    setGenre(data);
+    setOpenEditModal(true);
+  };
+  const closeEditModal = () => {
+    setOpenEditModal(false);
+  };
+
   const [pageNumber, setPageNumber] = useState(1);
   const onPageNumberChange = (page) => {
     setPageNumber(page);
   };
 
-  // const genre = useSelector((state) => selectGenreById(state, Number(postId)));
   const genres = useSelector(selectAllGenres);
   const genersCount = useSelector(getGenresCount);
   const genresStatus = useSelector(getGenresStatus);
@@ -52,7 +61,7 @@ export default function Geners() {
   } else if (genresStatus === "succeeded") {
     genresTable = (
       <GenreTable
-        showModal={showModal}
+        showEditModal={showEditModal}
         current={pageNumber}
         name="Genre"
         data={genres}
@@ -85,6 +94,18 @@ export default function Geners() {
         name="Add New Genre"
         closeModal={closeModal}
         form={<GenreForm closeModal={closeModal} />}
+      />
+
+      <FormModel
+        open={openEditModal}
+        name="Update Genre"
+        closeModal={closeEditModal}
+        form={
+          <GenreUpdateForm
+            closeEditModal={closeEditModal}
+            genre={{ ...genre }}
+          />
+        }
       />
 
       <div className="table_wraper">{genresTable}</div>

@@ -4,11 +4,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { Input, Table, Rate, Popconfirm } from "antd";
 import Highlighter from "react-highlight-words";
 
-import {
-  deleteGenre,
-  selectAllGenres,
-  selectGenreById,
-} from "../../../pages/music/stateSlice/genresSlice";
+import { deleteGenre } from "../../../pages/music/stateSlice/genresSlice";
 
 export default function GenreTable(props) {
   const dispatch = useDispatch();
@@ -19,9 +15,7 @@ export default function GenreTable(props) {
   const searchInput = useRef(null);
 
   const [requestStatus, setRequestStatus] = useState("idle");
-  const [genreId, setGenreId] = useState();
-
-  const genre = useSelector((state) => selectGenreById(state, Number(genreId)));
+  const [genre, setGenre] = useState();
 
   const onDeleteGenreClicked = () => {
     try {
@@ -153,12 +147,17 @@ export default function GenreTable(props) {
       render: (data) => (
         <div className="table_action">
           <div className="action_edit">
-            <i className="bx bxs-edit" onClick={props.showModal}></i>
+            <i
+              className="bx bxs-edit"
+              onClick={() => {
+                props.showEditModal(data);
+              }}
+            ></i>
           </div>
           <div
             className="action_delete"
             onClick={() => {
-              setGenreId(data.id);
+              setGenre(data);
             }}
           >
             <Popconfirm

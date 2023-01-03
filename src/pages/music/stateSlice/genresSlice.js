@@ -32,20 +32,20 @@ export const addNewGenre = createAsyncThunk('genres/addNewGenre', async (initial
     return response.data
 })
 
-// export const updateGenre = createAsyncThunk('genres/updateGenre', async (initialGenre) => {
-//     const { id } = initialGenre;
-//     const config = {
-//         headers: {
-//           "content-type": "multipart/form-data",
-//         },
-//       };
-//     try {
-//         const response = await axios.put(`${URL}/${id}`, initialGenre, config)
-//         return response.data
-//     } catch (err) {
-//         return err.message;
-//     }
-// })
+export const updateGenre = createAsyncThunk('genres/updateGenre', async (initialGenre) => {
+    const { id } = initialGenre;
+    const config = {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      };
+    try {
+        const response = await axios.patch(`${URL}/${id}`, initialGenre, config)
+        return response.data
+    } catch (err) {
+        return err.message;
+    }
+})
 
 export const deleteGenre = createAsyncThunk('genres/deleteGenre', async (initialGenre) => {
     const { id } = initialGenre;
@@ -117,12 +117,22 @@ const genresSlice = createSlice({
                 state.genres[0] = genres;
                 notify("success", `Succeed deleting the genre!`);
             })
+            .addCase(updateGenre.fulfilled, (state, action) => {
+                if (!action.payload?.id) {
+                    notify("error", `Failed updating the genre!`);
+                    return;
+                }
+                const loadedGenres = action.payload
+                const { id } = loadedGenres;
+                loadedGenres.key = id
+                const genres = state.genres[0].filter(genre => genre.id !== id);
+                state.genres[0] = [...genres, loadedGenres];
+                notify("success", `Succeed updating the genre!`);
+            })
     }
 })
 
 export const selectAllGenres = (state) => state.genres.genres[0]
-export const selectGenreById = (state, genreId) =>
-    state.genres.genres[0].find(genre => genre.id === genreId);
 export const getGenresCount = (state) => state.genres.count
 export const getGenresStatus = (state) => state.genres.status
 export const getGenresError = (state) => state.genres.error

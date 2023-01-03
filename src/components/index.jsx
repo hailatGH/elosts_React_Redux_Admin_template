@@ -11,6 +11,7 @@ export { default as ArtistTable } from "./media/tables/ArtistTable";
 export { default as AlbumForm } from "./media/forms/AlbumForm";
 export { default as AlbumTable } from "./media/tables/AlbumTable";
 export { default as GenreForm } from "./media/forms/GenreForm";
+export { default as GenreUpdateForm } from "./media/forms/GenreUpdateForm";
 export { default as GenreTable } from "./media/tables/GenreTable";
 export { default as TrackForm } from "./media/forms/TrackForm";
 export { default as TrackTable } from "./media/tables/TrackTable";
