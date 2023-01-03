@@ -150,7 +150,8 @@ export default function GenreTable(props) {
             <i
               className="bx bxs-edit"
               onClick={() => {
-                props.showEditModal(data);
+                props.onSetGenre(data);
+                props.showModal();
               }}
             ></i>
           </div>

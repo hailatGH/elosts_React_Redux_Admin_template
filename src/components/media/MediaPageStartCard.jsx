@@ -17,7 +17,10 @@ export default function MediaPageStartCard(props) {
           <Button
             type="primary"
             style={{ fontSize: "14px", fontWeight: "600", borderRadius: "4px" }}
-            onClick={props.showModal}
+            onClick={() => {
+              props.onSetGenre({});
+              props.showModal();
+            }}
           >
             Add {props.name}
           </Button>

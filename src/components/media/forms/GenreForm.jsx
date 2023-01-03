@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addNewGenre } from "../../../pages/music/stateSlice/genresSlice";
+import {
+  updateGenre,
+  addNewGenre,
+} from "../../../pages/music/stateSlice/genresSlice";
 import { Input, InputNumber, Checkbox, Button, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
@@ -8,18 +11,29 @@ export default function GenreForm(props) {
   const dispatch = useDispatch();
   const [addRequestStatus, setAddRequestStatus] = useState("idle");
   const [imageUrl, setImageUrl] = useState();
+  const [isPost, setIsPost] = useState();
   const { TextArea } = Input;
 
-  const [inputData, setInputData] = useState(() => {
-    return {
-      genre_name: "",
-      genre_rating: null,
-      genre_status: false,
-      genre_description: "",
-      genre_coverImage: null,
-      encoder_FUI: "",
-    };
+  const [inputData, setInputData] = useState({
+    genre_name: "",
+    genre_rating: null,
+    genre_status: false,
+    genre_description: "",
+    genre_coverImage: null,
+    encoder_FUI: "",
   });
+
+  useEffect(() => {
+    setInputData({
+      genre_name: props.genre?.genre_name,
+      genre_rating: props.genre?.genre_rating,
+      genre_status: props.genre?.genre_status,
+      genre_description: props.genre?.genre_description,
+      genre_coverImage: null,
+      encoder_FUI: props.genre?.encoder_FUI,
+    });
+    setImageUrl(props.genre?.genre_coverImage);
+  }, [props?.genre]);
 
   function handleChange(event) {
     const { name, value, type, checked } = event.target;
@@ -47,6 +61,8 @@ export default function GenreForm(props) {
     event.preventDefault();
     try {
       setAddRequestStatus("pending");
+      // props?.genre
+      dispatch(updateGenre({ ...inputData, id: props.genre.id })).unwrap();
       dispatch(addNewGenre(inputData)).unwrap();
     } catch (err) {
       setAddRequestStatus("failed");

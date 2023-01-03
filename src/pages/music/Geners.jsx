@@ -32,13 +32,8 @@ export default function Geners() {
   };
 
   const [genre, setGenre] = useState();
-  const [openEditModal, setOpenEditModal] = useState(false);
-  const showEditModal = (data) => {
+  const onSetGenre = (data) => {
     setGenre(data);
-    setOpenEditModal(true);
-  };
-  const closeEditModal = () => {
-    setOpenEditModal(false);
   };
 
   const [pageNumber, setPageNumber] = useState(1);
@@ -61,12 +56,13 @@ export default function Geners() {
   } else if (genresStatus === "succeeded") {
     genresTable = (
       <GenreTable
-        showEditModal={showEditModal}
+        showModal={showModal}
         current={pageNumber}
         name="Genre"
         data={genres}
         genersCount={genersCount}
         onPageNumberChange={onPageNumberChange}
+        onSetGenre={onSetGenre}
       />
     );
   } else if (genresStatus === "failed") {
@@ -87,25 +83,17 @@ export default function Geners() {
         </Breadcrumb.Item>
       </Breadcrumb>
 
-      <MediaPageStartCard showModal={showModal} name="Genre" />
+      <MediaPageStartCard
+        showModal={showModal}
+        onSetGenre={onSetGenre}
+        name="Genre"
+      />
 
       <FormModel
         open={open}
         name="Add New Genre"
         closeModal={closeModal}
-        form={<GenreForm closeModal={closeModal} />}
-      />
-
-      <FormModel
-        open={openEditModal}
-        name="Update Genre"
-        closeModal={closeEditModal}
-        form={
-          <GenreUpdateForm
-            closeEditModal={closeEditModal}
-            genre={{ ...genre }}
-          />
-        }
+        form={<GenreForm closeModal={closeModal} genre={{ ...genre }} />}
       />
 
       <div className="table_wraper">{genresTable}</div>
