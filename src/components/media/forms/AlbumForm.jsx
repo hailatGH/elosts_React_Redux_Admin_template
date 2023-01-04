@@ -94,9 +94,9 @@ export default function AlbumForm(props) {
     event.preventDefault();
     try {
       setAddRequestStatus("pending");
-      // props.album.id
-      // ? dispatch(updateAlbum({ ...inputData, id: props.album.id })).unwrap()
-      dispatch(addNewAlbum(inputData)).unwrap();
+      props.album.id
+        ? dispatch(updateAlbum({ ...inputData, id: props.album.id })).unwrap()
+        : dispatch(addNewAlbum(inputData)).unwrap();
     } catch (err) {
       setAddRequestStatus("failed");
     } finally {
@@ -178,7 +178,7 @@ export default function AlbumForm(props) {
         <Select
           id="artist_id"
           name="artist_id"
-          mode="multiple"
+          // mode="multiple"
           size="middle"
           placeholder="Artist"
           bordered={false}
@@ -201,7 +201,7 @@ export default function AlbumForm(props) {
               .localeCompare((optionB?.label ?? "").toLowerCase())
           }
           style={{
-            height: "70px",
+            height: "35px",
             borderRadius: "2px",
             border: "1px solid #D9D9D9",
             width: "100%",

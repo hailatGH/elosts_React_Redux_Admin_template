@@ -210,7 +210,7 @@ export default function ArtistTable(props) {
         onChange: props.onPageNumberChange,
       }}
       scroll={{
-        y: 350,
+        y: 420,
         x: 1300,
       }}
     />

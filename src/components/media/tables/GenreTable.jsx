@@ -200,7 +200,7 @@ export default function GenreTable(props) {
         current: props.current,
         defaultCurrent: 1,
         defaultPageSize: 10,
-        total: props.genersCount,
+        total: props.genresCount,
         onChange: props.onPageNumberChange,
       }}
       scroll={{

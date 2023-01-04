@@ -1,4 +1,9 @@
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import {
+  updateTrack,
+  addNewTrack,
+} from "../../../pages/music/stateSlice/tracksSlice";
 import axios from "axios";
 import {
   Input,
@@ -10,74 +15,85 @@ import {
   Select,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function TrackForm(props) {
-  const { TextArea } = Input;
-  const [audioSet, setAudioSet] = useState();
-  const [imageSet, setImageSet] = useState();
+  const dispatch = useDispatch();
+  const [addRequestStatus, setAddRequestStatus] = useState("idle");
   const [imageUrl, setImageUrl] = useState();
-  const [listArtist, setListArtist] = useState([]);
-  const [listAlbum, setListAlbum] = useState([]);
-  const [listGenre, setListGenre] = useState([]);
-  const [inputData, setInputData] = useState(() => {
-    return {
-      track_name: "",
-      track_rating: null,
-      track_status: false,
-      track_releaseDate: null,
-      track_description: "",
-      track_coverImage: null,
-      track_audioFile: null,
-      track_lyrics: "",
-      track_price: null,
-      artists_featuring: "",
-      encoder_FUI: "",
-      album_id: null,
-      genre_id: null,
-      artist_id: [],
-    };
+  const [listArtist, setListArtist] = useState();
+  const [listAlbum, setListAlbum] = useState();
+  const [listGenre, setListGenre] = useState();
+  const { TextArea } = Input;
+
+  const [inputData, setInputData] = useState({
+    track_name: "",
+    track_rating: null,
+    track_status: false,
+    track_releaseDate: null,
+    track_description: "",
+    track_coverImage: null,
+    track_audioFile: null,
+    track_lyrics: "",
+    track_price: null,
+    artists_featuring: "",
+    encoder_FUI: "",
+    album_id: null,
+    genre_id: null,
+    artist_id: null,
   });
 
   useEffect(() => {
-    getArtists();
-    getGenres();
-  }, []);
-
-  useEffect(() => {
-    getAlbums(inputData.artist_id);
+    getAlbums(inputData?.artist_id);
   }, [inputData.artist_id]);
 
+  useEffect(() => {
+    setInputData({
+      track_name: props.track?.track_name,
+      track_rating: props.track?.track_rating,
+      track_status: props.track?.track_status,
+      track_releaseDate: props.track?.track_releaseDate,
+      track_description: props.track?.track_description,
+      track_coverImage: props.track?.track_coverImage,
+      track_audioFile: props.track?.track_audioFile,
+      track_lyrics: props.track?.track_lyrics,
+      track_price: props.track?.track_price,
+      artists_featuring: props.track?.artists_featuring,
+      encoder_FUI: "",
+      album_id: props.track?.album_id,
+      genre_id: props.track?.genre_id,
+      artist_id: props.track?.artist_id,
+    });
+    setImageUrl(props.track?.track_coverImage);
+    listArtist ? null : getArtists();
+    listGenre ? null : getGenres();
+  }, [props?.track]);
+
   function getArtists() {
-    axios
-      .get("https://music-service-vdzflryflq-ew.a.run.app/webApp/artist")
-      .then(function (response) {
-        let artists = [];
-        let responseLength = Object.keys(response.data.results).length;
-        for (let i = 0; i < responseLength; i++) {
-          let artist = {};
-          artist["label"] = response.data.results[i].artist_name;
-          artist["value"] = response.data.results[i].id;
-          artists.push(artist);
-        }
-        setListArtist(artists);
-      });
+    axios.get("http://127.0.0.1:8000/webApp/artist").then(function (response) {
+      let artists = [];
+      let responseLength = Object.keys(response.data.results).length;
+      for (let i = 0; i < responseLength; i++) {
+        let artist = {};
+        artist["label"] = response.data.results[i].artist_name;
+        artist["value"] = response.data.results[i].id;
+        artists.push(artist);
+      }
+      setListArtist(artists);
+    });
   }
 
   function getAlbums(artist_id) {
-    let artist_id_str = "1";
-    if (artist_id) {
-      artist_id_str = "";
-      for (let id of artist_id)
-        artist_id_str = artist_id_str + "," + id.toString();
+    // let artist_id_str = "1";
+    // if (artist_id) {
+    //   artist_id_str = "";
+    //   for (let id of artist_id)
+    //     artist_id_str = artist_id_str + "," + id.toString();
 
-      artist_id_str = artist_id_str.substring(1);
-    }
-
+    //   artist_id_str = artist_id_str.substring(1);
+    // }
     axios
       .get(
-        `https://music-service-vdzflryflq-ew.a.run.app/webApp/albumsByArtistId?artistId=${artist_id_str}`
+        `http://127.0.0.1:8000/webApp/albumsByArtistId?artistId=${artist_id}`
       )
       .then(function (response) {
         let albums = [];
@@ -91,26 +107,20 @@ export default function TrackForm(props) {
         setListAlbum(albums);
       });
   }
-  function getGenres() {
-    axios
-      .get("https://music-service-vdzflryflq-ew.a.run.app/webApp/genre")
-      .then(function (response) {
-        let genres = [];
-        let responseLength = Object.keys(response.data.results).length;
-        for (let i = 0; i < responseLength; i++) {
-          let genre = {};
-          genre["label"] = response.data.results[i].genre_name;
-          genre["value"] = response.data.results[i].id;
-          genres.push(genre);
-        }
-        setListGenre(genres);
-      });
-  }
 
-  const notify = (type, msg) => {
-    if (type === "success") toast.success(msg);
-    if (type === "error") toast.error(msg);
-  };
+  function getGenres() {
+    axios.get("http://127.0.0.1:8000/webApp/genre").then(function (response) {
+      let genres = [];
+      let responseLength = Object.keys(response.data.results).length;
+      for (let i = 0; i < responseLength; i++) {
+        let genre = {};
+        genre["label"] = response.data.results[i].genre_name;
+        genre["value"] = response.data.results[i].id;
+        genres.push(genre);
+      }
+      setListGenre(genres);
+    });
+  }
 
   function handleChange(event) {
     const { name, value, type, checked } = event.target;
@@ -137,42 +147,35 @@ export default function TrackForm(props) {
       encoder_FUI: "",
       album_id: null,
       genre_id: null,
-      artist_id: [],
+      artist_id: null,
     });
-    setImageSet(false);
-    setAudioSet(false);
+    setImageUrl(null);
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(inputData);
-    // const url = "https://music-service-vdzflryflq-ew.a.run.app/webApp/track";
+    try {
+      setAddRequestStatus("pending");
+      props.track.id
+        ? dispatch(updateTrack({ ...inputData, id: props.track.id })).unwrap()
+        : dispatch(addNewTrack(inputData)).unwrap();
+    } catch (err) {
+      setAddRequestStatus("failed");
+    } finally {
+      setAddRequestStatus("idle");
+      props.closeModal();
+      cleanUp();
+    }
+  }
 
-    // const formData = new FormData();
-    // for (let [key, value] of Object.entries(inputData)) {
-    //   formData.append(key, value);
-    // }
-
-    // const config = {
-    //   headers: {
-    //     "content-type": "multipart/form-data",
-    //   },
-    // };
-
-    // axios
-    //   .post(url, formData, config)
-    //   .then((response) => {
-    //     response.status === 201
-    //       ? notify("success", `Creating ${inputData.track_name} succeed!`)
-    //       : notify("error", `Creating ${inputData.track_name} failed!`);
-    //     props.closeModal();
-    //     cleanUp();
-    //   })
-    //   .catch((response) => {
-    //     notify("error", `Creating ${inputData.track_name} failed!`);
-    //     props.closeModal();
-    //     cleanUp();
-    //   });
+  function handleImageUpload(event) {
+    setImageUrl(URL.createObjectURL(event.target.files[0]));
+    setInputData((prevInputData) => {
+      return {
+        ...prevInputData,
+        track_coverImage: event.target.files[0],
+      };
+    });
   }
 
   return (
@@ -271,7 +274,7 @@ export default function TrackForm(props) {
         <Select
           id=""
           name="artist_id"
-          mode="multiple"
+          // mode="multiple"
           size="middle"
           placeholder="Artist"
           bordered={false}
@@ -294,7 +297,7 @@ export default function TrackForm(props) {
               .localeCompare((optionB?.label ?? "").toLowerCase())
           }
           style={{
-            height: "70px",
+            height: "35px",
             borderRadius: "2px",
             border: "1px solid #D9D9D9",
             width: "100%",
@@ -371,7 +374,7 @@ export default function TrackForm(props) {
         <TextArea
           placeholder="Description"
           value={inputData.track_description}
-          onChange={() => handleChange(event)}
+          onChange={(event) => handleChange(event)}
           name="track_description"
           rows={4}
           style={{ borderRadius: "2px" }}
@@ -382,7 +385,7 @@ export default function TrackForm(props) {
         <TextArea
           placeholder="Lyrics"
           value={inputData.track_lyrics}
-          onChange={() => handleChange(event)}
+          onChange={(event) => handleChange(event)}
           name="track_lyrics"
           rows={6}
           style={{ borderRadius: "2px" }}
@@ -393,7 +396,7 @@ export default function TrackForm(props) {
         <TextArea
           placeholder="Featuring Artists"
           value={inputData.artists_featuring}
-          onChange={() => handleChange(event)}
+          onChange={(event) => handleChange(event)}
           name="artists_featuring"
           rows={2}
           style={{ borderRadius: "2px" }}
@@ -403,13 +406,12 @@ export default function TrackForm(props) {
       <div className="form-item upload">
         <span>Cover Image</span>
         <div className="image_upload_preview">
-          {imageSet ? (
+          {imageUrl ? (
             <Image
               width={100}
               height={100}
               src={imageUrl}
-              preview={false}
-              onClick={() => setImageSet(false)}
+              preview={true}
               style={{ borderRadius: "4px" }}
             />
           ) : (
@@ -434,39 +436,35 @@ export default function TrackForm(props) {
           id="imgFiles"
           style={{ visibility: "hidden" }}
           type="file"
-          onChange={(event) => {
-            setImageUrl(URL.createObjectURL(event.target.files[0]));
-            setInputData((prevInputData) => ({
-              ...prevInputData,
-              track_coverImage: event.target.files[0],
-            }));
-            setImageSet(true);
-          }}
+          onChange={(event) => handleImageUpload(event)}
         />
       </div>
 
       <div className="form-item upload">
         <span>Audio File</span>
-        {audioSet ? (
-          <label htmlFor="audioFiles" onClick={() => setAudioSet(false)}>
-            <div className="upload_label audio">
-              <i
-                className="bx bx-check-double"
-                style={{ color: "green", fontWeight: 700, fontSize: "20px" }}
-              ></i>
-              <div
-                style={{
-                  marginTop: 8,
-                  cursor: "pointer",
-                  opacity: "0.7",
-                  color: "green",
-                }}
-              >
-                Uploaded
+        <div className="image_upload_preview">
+          {inputData.track_audioFile ? (
+            <label htmlFor="audioFiles">
+              <div className="upload_label audio">
+                <i
+                  className="bx bx-check-double"
+                  style={{ color: "green", fontWeight: 700, fontSize: "20px" }}
+                ></i>
+                <div
+                  style={{
+                    marginTop: 8,
+                    cursor: "pointer",
+                    opacity: "0.7",
+                    color: "green",
+                  }}
+                >
+                  Uploaded
+                </div>
               </div>
-            </div>
-          </label>
-        ) : (
+            </label>
+          ) : (
+            ""
+          )}
           <label htmlFor="audioFiles">
             <div className="upload_label audio">
               <PlusOutlined />
@@ -481,13 +479,12 @@ export default function TrackForm(props) {
               </div>
             </div>
           </label>
-        )}
+        </div>
         <Input
           id="audioFiles"
           style={{ visibility: "hidden" }}
           type="file"
           onChange={(event) => {
-            setAudioSet(true);
             setInputData((prevInputData) => ({
               ...prevInputData,
               track_audioFile: event.target.files[0],

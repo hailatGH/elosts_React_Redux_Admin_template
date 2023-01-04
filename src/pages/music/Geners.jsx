@@ -41,7 +41,7 @@ export default function Geners() {
   };
 
   const genres = useSelector(selectAllGenres);
-  const genersCount = useSelector(getGenresCount);
+  const genresCount = useSelector(getGenresCount);
   const genresStatus = useSelector(getGenresStatus);
   const genresError = useSelector(getGenresError);
 
@@ -57,7 +57,7 @@ export default function Geners() {
     dispatch(fetchGenres(pageNumber));
   }, [dispatch, pageNumber]);
 
-  let genresTable = <h3>Something</h3>;
+  let genresTable = "";
   if (genresStatus === "loading") {
     genresTable = "loading";
   } else if (genresStatus === "succeeded") {
@@ -67,7 +67,7 @@ export default function Geners() {
         current={pageNumber}
         name="Genre"
         data={genres}
-        genersCount={genersCount}
+        genresCount={genresCount}
         onPageNumberChange={onPageNumberChange}
         onSetGenreId={onSetGenreId}
       />

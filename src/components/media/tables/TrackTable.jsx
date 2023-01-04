@@ -1,29 +1,32 @@
+import { useDispatch } from "react-redux";
 import { useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import { Input, Table, Rate, Popconfirm, notification } from "antd";
+import { Input, Table, Rate, Popconfirm } from "antd";
 import Highlighter from "react-highlight-words";
 
-const data = [
-  {
-    key: "1",
-    track_coverImage:
-      "https://storage.googleapis.com/kin-project-352614-kinmusic-storage/Media_Files/Tracks_Cover_Images/Libe%20Sew_Media_Files/Tracks_Cover_Images/Libe_Sew_Yene_Zema.jpg",
-    track_name: "Kal Bekal",
-    track_price: 50,
-    track_status: true,
-    track_viewcount: 0,
-    track_rating: 3.5,
-    encoder_FUI: "0Yi6yM0YmDWd55AfF0cYea2iXsc2",
-    track_description: "Ethiopian Artist Bisre",
-  },
-];
+import { deleteTrack } from "../../../pages/music/stateSlice/tracksSlice";
 
 export default function ArtistTable(props) {
-  const text = `Are you sure you want to delete this ${props.name}?`;
+  const dispatch = useDispatch();
 
+  const text = `Are you sure you want to delete this ${props.name}?`;
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+
+  const [requestStatus, setRequestStatus] = useState("idle");
+  const [track, setTrack] = useState();
+
+  const onDeleteTrackClicked = () => {
+    try {
+      setRequestStatus("pending");
+      dispatch(deleteTrack(track)).unwrap();
+    } catch (err) {
+      console.error("Failed to delete the track", err);
+    } finally {
+      setRequestStatus("idle");
+    }
+  };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -82,13 +85,6 @@ export default function ArtistTable(props) {
         text
       ),
   });
-
-  const openNotification = () => {
-    notification.info({
-      message: "Notification",
-      description: "Description",
-    });
-  };
 
   const columns = [
     {
@@ -154,16 +150,27 @@ export default function ArtistTable(props) {
       key: "action",
       width: "10%",
       fixed: "right",
-      render: () => (
+      render: (data) => (
         <div className="table_action">
           <div className="action_edit">
-            <i className="bx bxs-edit" onClick={props.showModal}></i>
+            <i
+              className="bx bxs-edit"
+              onClick={() => {
+                props.onSetTrackId(data.id);
+                props.showModal();
+              }}
+            ></i>
           </div>
-          <div className="action_delete">
+          <div
+            className="action_delete"
+            onClick={() => {
+              setTrack(data);
+            }}
+          >
             <Popconfirm
               placement="left"
               title={text}
-              onConfirm={openNotification}
+              onConfirm={onDeleteTrackClicked}
               okText="Yes"
               cancelText="No"
             >
@@ -178,7 +185,7 @@ export default function ArtistTable(props) {
   return (
     <Table
       columns={columns}
-      dataSource={data}
+      dataSource={props.data}
       size="small"
       expandable={{
         expandedRowRender: (record) => (
@@ -192,9 +199,18 @@ export default function ArtistTable(props) {
         ),
         rowExpandable: (record) => record.name !== "Not Expandable",
       }}
-      pagination={{ defaultCurrent: 1, total: 500 }}
+      pagination={{
+        size: "small",
+        hideOnSinglePage: true,
+        showSizeChanger: false,
+        current: props.current,
+        defaultCurrent: 1,
+        defaultPageSize: 10,
+        total: props.tracksCount,
+        onChange: props.onPageNumberChange,
+      }}
       scroll={{
-        y: 350,
+        y: 420,
         x: 1300,
       }}
     />

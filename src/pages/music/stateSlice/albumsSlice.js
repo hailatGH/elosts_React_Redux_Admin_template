@@ -24,8 +24,8 @@ export const fetchAlbums = createAsyncThunk('albums/fetchAlbums', async (pageNum
 })
 
 export const addNewAlbum = createAsyncThunk('albums/addNewAlbum', async (initialAlbum) => {
-    console.log("Before");
-    console.log(initialAlbum);
+    // console.log("Before");
+    // console.log(initialAlbum);
     // const initialAlbum = {...initialAlbum, artist_id: [1,]}
     const config = {
           headers: {
@@ -36,8 +36,8 @@ export const addNewAlbum = createAsyncThunk('albums/addNewAlbum', async (initial
         const response = await axios.post(URL, initialAlbum, config)
         return response.data
     } catch (response) {
-        console.log("After");
-        console.log(initialAlbum)
+        // console.log("After");
+        // console.log(initialAlbum)
         console.log(response)
         return response
     }
@@ -112,11 +112,11 @@ const albumsSlice = createSlice({
             })
             .addCase(addNewAlbum.fulfilled, (state, action) => {
                 // console.log(action.payload);
-                // const loadedAlbums = action.payload
-                // loadedAlbums.key = loadedAlbums.id
-                // state.albums[0].push(loadedAlbums)
-                // state.count += 1
-                // notify("success", `Creating ${loadedAlbums.album_name} succeed!`);
+                const loadedAlbums = action.payload
+                loadedAlbums.key = loadedAlbums.id
+                state.albums[0].push(loadedAlbums)
+                state.count += 1
+                notify("success", `Creating ${loadedAlbums.album_name} succeed!`);
             })
             .addCase(addNewAlbum.rejected, (state, action) => {
                 // console.log(action)
