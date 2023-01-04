@@ -22,11 +22,6 @@ import {
 export default function Albums() {
   const dispatch = useDispatch();
 
-  const albums = useSelector(selectAllAlbums);
-  const albumsCount = useSelector(getAlbumsCount);
-  const albumsStatus = useSelector(getAlbumsStatus);
-  const albumsError = useSelector(getAlbumsError);
-
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
@@ -35,10 +30,28 @@ export default function Albums() {
     setOpen(false);
   };
 
+  const [albumId, setAlbumId] = useState(1);
+  const onSetAlbumId = (id) => {
+    setAlbumId(id);
+  };
+
   const [pageNumber, setPageNumber] = useState(1);
   const onPageNumberChange = (page) => {
     setPageNumber(page);
   };
+
+  const albums = useSelector(selectAllAlbums);
+  const albumsCount = useSelector(getAlbumsCount);
+  const albumsStatus = useSelector(getAlbumsStatus);
+  const albumsError = useSelector(getAlbumsError);
+
+  let album = {};
+
+  try {
+    album = albums.find((album) => album?.id === albumId);
+  } catch (err) {
+    album = {};
+  }
 
   useEffect(() => {
     dispatch(fetchAlbums(pageNumber));
@@ -56,6 +69,7 @@ export default function Albums() {
         data={albums}
         albumsCount={albumsCount}
         onPageNumberChange={onPageNumberChange}
+        onSetAlbumId={onSetAlbumId}
       />
     );
   } else if (albumsStatus === "failed") {
@@ -76,13 +90,17 @@ export default function Albums() {
         </Breadcrumb.Item>
       </Breadcrumb>
 
-      <MediaPageStartCard showModal={showModal} name="Album" />
+      <MediaPageStartCard
+        showModal={showModal}
+        onSetId={onSetAlbumId}
+        name="Album"
+      />
 
       <FormModel
         open={open}
         name="Add New Album"
         closeModal={closeModal}
-        form={<AlbumForm closeModal={closeModal} />}
+        form={<AlbumForm closeModal={closeModal} album={{ ...album }} />}
       />
 
       <div className="table_wraper">{albumsTable}</div>

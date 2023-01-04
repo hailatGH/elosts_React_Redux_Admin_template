@@ -3,7 +3,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const URL = "https://music-service-vdzflryflq-ew.a.run.app/webApp/album"
+// const URL = "https://music-service-vdzflryflq-ew.a.run.app/webApp/album"
+const URL = "http://127.0.0.1:8000/webApp/album"
 
 const initialState = {
     count: null,
@@ -22,15 +23,53 @@ export const fetchAlbums = createAsyncThunk('albums/fetchAlbums', async (pageNum
     return response.data
 })
 
-export const addNewAlbum = createAsyncThunk('albums/addNewAlbum', async (initialPost) => {
+export const addNewAlbum = createAsyncThunk('albums/addNewAlbum', async (initialAlbum) => {
+    console.log("Before");
+    console.log(initialAlbum);
+    // const initialAlbum = {...initialAlbum, artist_id: [1,]}
     const config = {
           headers: {
             "content-type": "multipart/form-data",
           },
         };
-    const response = await axios.post(URL, initialPost, config)
-    console.log(response)
-    return response.data
+    try {
+        const response = await axios.post(URL, initialAlbum, config)
+        return response.data
+    } catch (response) {
+        console.log("After");
+        console.log(initialAlbum)
+        console.log(response)
+        return response
+    }
+    // return response.data
+})
+
+export const updateAlbum = createAsyncThunk('albums/updateAlbum', async (initialAlbum) => {
+    const { id } = initialAlbum;
+    const config = {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      };
+
+    try {
+        const response = await axios.patch(`${URL}/${id}`, initialAlbum, config)
+        return response.data
+    } catch (err) {
+        return err.message;
+    }
+})
+
+export const deleteAlbum = createAsyncThunk('albums/deleteAlbum', async (initialAlbum) => {
+    const { id } = initialAlbum;
+    try {
+        const response = await axios.delete(`${URL}/${id}`)
+        if (response?.status === 200) return initialAlbum;
+        if (response?.status === 204) return initialAlbum;
+        return response?.status;
+    } catch (err) {
+        return err.message;
+    }
 })
 
 const albumsSlice = createSlice({
@@ -72,14 +111,39 @@ const albumsSlice = createSlice({
                 state.error = action.error.message
             })
             .addCase(addNewAlbum.fulfilled, (state, action) => {
-                const loadedAlbums = action.payload
-                loadedAlbums.key = loadedAlbums.id
-                state.albums[0].push(loadedAlbums)
-                state.count += 1
-                notify("success", `Creating ${loadedAlbums.album_name} succeed!`);
+                // console.log(action.payload);
+                // const loadedAlbums = action.payload
+                // loadedAlbums.key = loadedAlbums.id
+                // state.albums[0].push(loadedAlbums)
+                // state.count += 1
+                // notify("success", `Creating ${loadedAlbums.album_name} succeed!`);
             })
             .addCase(addNewAlbum.rejected, (state, action) => {
+                // console.log(action)
+                // console.log(state)
                 notify("error", `Failed creating the album!`);
+            })
+            .addCase(deleteAlbum.fulfilled, (state, action) => {
+                if (!action.payload?.id) {
+                    notify("error", `Failed deleting the album!`);
+                    return;
+                }
+                const { id } = action.payload;
+                const albums = state.albums[0].filter(album => album.id !== id);
+                state.albums[0] = albums;
+                notify("success", `Succeed deleting the album!`);
+            })
+            .addCase(updateAlbum.fulfilled, (state, action) => {
+                if (!action.payload?.id) {
+                    notify("error", `Failed updating the album!`);
+                    return;
+                }
+                const loadedAlbums = action.payload
+                const { id } = loadedAlbums;
+                loadedAlbums.key = id
+                const albums = state.albums[0].filter(album => album.id !== id);
+                state.albums[0] = [...albums, loadedAlbums];
+                notify("success", `Succeed updating the album!`);
             })
     }
 })

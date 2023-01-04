@@ -14,7 +14,6 @@ import {
 } from "./stateSlice/genresSlice";
 import {
   GenreForm,
-  GenreUpdateForm,
   GenreTable,
   MediaPageStartCard,
   FormModel,
@@ -31,9 +30,9 @@ export default function Geners() {
     setOpen(false);
   };
 
-  const [genre, setGenre] = useState();
-  const onSetGenre = (data) => {
-    setGenre(data);
+  const [genreId, setGenreId] = useState(1);
+  const onSetGenreId = (id) => {
+    setGenreId(id);
   };
 
   const [pageNumber, setPageNumber] = useState(1);
@@ -45,6 +44,14 @@ export default function Geners() {
   const genersCount = useSelector(getGenresCount);
   const genresStatus = useSelector(getGenresStatus);
   const genresError = useSelector(getGenresError);
+
+  let genre = {};
+
+  try {
+    genre = genres.find((genre) => genre?.id === genreId);
+  } catch (err) {
+    genre = {};
+  }
 
   useEffect(() => {
     dispatch(fetchGenres(pageNumber));
@@ -62,7 +69,7 @@ export default function Geners() {
         data={genres}
         genersCount={genersCount}
         onPageNumberChange={onPageNumberChange}
-        onSetGenre={onSetGenre}
+        onSetGenreId={onSetGenreId}
       />
     );
   } else if (genresStatus === "failed") {
@@ -85,7 +92,7 @@ export default function Geners() {
 
       <MediaPageStartCard
         showModal={showModal}
-        onSetGenre={onSetGenre}
+        onSetId={onSetGenreId}
         name="Genre"
       />
 

@@ -18,7 +18,7 @@ export default function MediaPageStartCard(props) {
             type="primary"
             style={{ fontSize: "14px", fontWeight: "600", borderRadius: "4px" }}
             onClick={() => {
-              props.onSetGenre({});
+              props.onSetId({});
               props.showModal();
             }}
           >

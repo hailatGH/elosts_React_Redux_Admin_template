@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { Input, Table, Rate, Popconfirm } from "antd";
@@ -22,7 +22,7 @@ export default function GenreTable(props) {
       setRequestStatus("pending");
       dispatch(deleteGenre(genre)).unwrap();
     } catch (err) {
-      console.error("Failed to delete the post", err);
+      console.error("Failed to delete the genre", err);
     } finally {
       setRequestStatus("idle");
     }
@@ -150,7 +150,7 @@ export default function GenreTable(props) {
             <i
               className="bx bxs-edit"
               onClick={() => {
-                props.onSetGenre(data);
+                props.onSetGenreId(data.id);
                 props.showModal();
               }}
             ></i>

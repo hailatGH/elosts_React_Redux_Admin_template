@@ -1,13 +1,32 @@
+import { useDispatch } from "react-redux";
 import { useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import { Input, Table, Rate, Popconfirm, notification } from "antd";
+import { Input, Table, Rate, Popconfirm } from "antd";
 import Highlighter from "react-highlight-words";
 
+import { deleteAlbum } from "../../../pages/music/stateSlice/albumsSlice";
+
 export default function AlbumTable(props) {
+  const dispatch = useDispatch();
+
   const text = `Are you sure you want to delete this ${props.name}?`;
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+
+  const [requestStatus, setRequestStatus] = useState("idle");
+  const [album, setAlbum] = useState();
+
+  const onDeleteAlbumClicked = () => {
+    try {
+      setRequestStatus("pending");
+      dispatch(deleteAlbum(album)).unwrap();
+    } catch (err) {
+      console.error("Failed to delete the album", err);
+    } finally {
+      setRequestStatus("idle");
+    }
+  };
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -66,13 +85,6 @@ export default function AlbumTable(props) {
         text
       ),
   });
-
-  const openNotification = () => {
-    notification.info({
-      message: "Notification",
-      description: "Description",
-    });
-  };
 
   const columns = [
     {
@@ -138,16 +150,27 @@ export default function AlbumTable(props) {
       key: "action",
       width: "10%",
       fixed: "right",
-      render: () => (
+      render: (data) => (
         <div className="table_action">
           <div className="action_edit">
-            <i className="bx bxs-edit" onClick={props.showModal}></i>
+            <i
+              className="bx bxs-edit"
+              onClick={() => {
+                props.onSetAlbumId(data.id);
+                props.showModal();
+              }}
+            ></i>
           </div>
-          <div className="action_delete">
+          <div
+            className="action_delete"
+            onClick={() => {
+              setAlbum(data);
+            }}
+          >
             <Popconfirm
               placement="left"
               title={text}
-              onConfirm={openNotification}
+              onConfirm={onDeleteAlbumClicked}
               okText="Yes"
               cancelText="No"
             >

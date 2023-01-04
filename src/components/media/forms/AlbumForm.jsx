@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addNewAlbum } from "../../../pages/music/stateSlice/albumsSlice";
 import axios from "axios";
+import {
+  updateAlbum,
+  addNewAlbum,
+} from "../../../pages/music/stateSlice/albumsSlice";
 import {
   Input,
   InputNumber,
@@ -16,43 +19,50 @@ import { PlusOutlined } from "@ant-design/icons";
 export default function AlbumForm(props) {
   const dispatch = useDispatch();
   const [addRequestStatus, setAddRequestStatus] = useState("idle");
-  const { TextArea } = Input;
-  const [imageSet, setImageSet] = useState();
   const [imageUrl, setImageUrl] = useState();
-  const [listArtist, setListArtist] = useState([]);
+  const [listArtist, setListArtist] = useState();
+  const { TextArea } = Input;
 
-  const [inputData, setInputData] = useState(() => {
-    return {
-      album_name: "",
-      album_rating: null,
-      album_status: false,
-      album_releaseDate: null,
-      album_description: "",
-      album_coverImage: null,
-      album_price: null,
-      encoder_FUI: "",
-      artist_id: [],
-    };
+  const [inputData, setInputData] = useState({
+    album_name: "",
+    album_rating: null,
+    album_status: false,
+    album_releaseDate: null,
+    album_description: "",
+    album_coverImage: null,
+    album_price: null,
+    encoder_FUI: "",
+    artist_id: null,
   });
 
   useEffect(() => {
-    getArtists();
-  }, []);
+    setInputData({
+      album_name: props.album?.album_name,
+      album_rating: props.album?.album_rating,
+      album_status: props.album?.album_status,
+      album_releaseDate: props.album?.album_releaseDate,
+      album_description: props.album?.album_description,
+      album_coverImage: props.album?.album_coverImage,
+      album_price: props.album?.album_price,
+      encoder_FUI: props.album?.encoder_FUI,
+      artist_id: props.album?.artist_id,
+    });
+    setImageUrl(props.album?.album_coverImage);
+    listArtist ? null : getArtists();
+  }, [props?.album]);
 
   function getArtists() {
-    axios
-      .get("https://music-service-vdzflryflq-ew.a.run.app/webApp/artist")
-      .then(function (response) {
-        let artists = [];
-        let responseLength = Object.keys(response.data.results).length;
-        for (let i = 0; i < responseLength; i++) {
-          let artist = {};
-          artist["label"] = response.data.results[i].artist_name;
-          artist["value"] = response.data.results[i].id;
-          artists.push(artist);
-        }
-        setListArtist(artists);
-      });
+    axios.get("http://127.0.0.1:8000/webApp/artist").then(function (response) {
+      let artists = [];
+      let responseLength = Object.keys(response.data.results).length;
+      for (let i = 0; i < responseLength; i++) {
+        let artist = {};
+        artist["label"] = response.data.results[i].artist_name;
+        artist["value"] = response.data.results[i].id;
+        artists.push(artist);
+      }
+      setListArtist(artists);
+    });
   }
 
   function handleChange(event) {
@@ -75,15 +85,17 @@ export default function AlbumForm(props) {
       album_coverImage: null,
       album_price: null,
       encoder_FUI: "",
-      artist_id: [],
+      artist_id: null,
     });
-    setImageSet(false);
+    setImageUrl(null);
   }
 
   function handleSubmit(event) {
     event.preventDefault();
     try {
       setAddRequestStatus("pending");
+      // props.album.id
+      // ? dispatch(updateAlbum({ ...inputData, id: props.album.id })).unwrap()
       dispatch(addNewAlbum(inputData)).unwrap();
     } catch (err) {
       setAddRequestStatus("failed");
@@ -92,33 +104,6 @@ export default function AlbumForm(props) {
       props.closeModal();
       cleanUp();
     }
-    // const url = "https://music-service-vdzflryflq-ew.a.run.app/webApp/album";
-
-    // const formData = new FormData();
-    // for (let [key, value] of Object.entries(inputData)) {
-    //   formData.append(key, value);
-    // }
-
-    // const config = {
-    //   headers: {
-    //     "content-type": "multipart/form-data",
-    //   },
-    // };
-
-    // axios
-    //   .post(url, formData, config)
-    //   .then((response) => {
-    //     response.status === 201
-    //       ? notify("success", `Creating ${inputData.album_name} succeed!`)
-    //       : notify("error", `Creating ${inputData.album_name} failed!`);
-    //     props.closeModal();
-    //     cleanUp();
-    //   })
-    //   .catch((response) => {
-    //     notify("error", `Creating ${inputData.album_name} failed!`);
-    //     props.closeModal();
-    //     cleanUp();
-    //   });
   }
 
   function handleImageUpload(event) {
@@ -129,7 +114,6 @@ export default function AlbumForm(props) {
         album_coverImage: event.target.files[0],
       };
     });
-    setImageSet(true);
   }
 
   return (
@@ -270,7 +254,7 @@ export default function AlbumForm(props) {
       <div className="form-item upload">
         <span>Cover Image</span>
         <div className="image_upload_preview">
-          {imageSet ? (
+          {imageUrl ? (
             <Image
               width={100}
               height={100}

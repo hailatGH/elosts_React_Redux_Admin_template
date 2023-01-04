@@ -3,7 +3,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const URL = "https://music-service-vdzflryflq-ew.a.run.app/webApp/genre"
+// const URL = "https://music-service-vdzflryflq-ew.a.run.app/webApp/genre"
+const URL = "http://127.0.0.1:8000//webApp/genre"
 
 const initialState = {
     count: null,
@@ -39,6 +40,7 @@ export const updateGenre = createAsyncThunk('genres/updateGenre', async (initial
           "content-type": "multipart/form-data",
         },
       };
+
     try {
         const response = await axios.patch(`${URL}/${id}`, initialGenre, config)
         return response.data

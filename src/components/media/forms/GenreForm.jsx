@@ -11,7 +11,6 @@ export default function GenreForm(props) {
   const dispatch = useDispatch();
   const [addRequestStatus, setAddRequestStatus] = useState("idle");
   const [imageUrl, setImageUrl] = useState();
-  const [isPost, setIsPost] = useState();
   const { TextArea } = Input;
 
   const [inputData, setInputData] = useState({
@@ -29,7 +28,7 @@ export default function GenreForm(props) {
       genre_rating: props.genre?.genre_rating,
       genre_status: props.genre?.genre_status,
       genre_description: props.genre?.genre_description,
-      genre_coverImage: null,
+      genre_coverImage: props.genre?.genre_coverImage,
       encoder_FUI: props.genre?.encoder_FUI,
     });
     setImageUrl(props.genre?.genre_coverImage);
@@ -61,9 +60,9 @@ export default function GenreForm(props) {
     event.preventDefault();
     try {
       setAddRequestStatus("pending");
-      // props?.genre
-      dispatch(updateGenre({ ...inputData, id: props.genre.id })).unwrap();
-      dispatch(addNewGenre(inputData)).unwrap();
+      props.genre.id
+        ? dispatch(updateGenre({ ...inputData, id: props.genre.id })).unwrap()
+        : dispatch(addNewGenre(inputData)).unwrap();
     } catch (err) {
       setAddRequestStatus("failed");
     } finally {

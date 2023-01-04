@@ -1,32 +1,42 @@
-import { useState } from "react";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import {
+  updateArtist,
+  addNewArtist,
+} from "../../../pages/music/stateSlice/artistsSlice";
 import { Input, InputNumber, Checkbox, DatePicker, Button, Image } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function ArtistForm(props) {
-  const { TextArea } = Input;
-  const [imageSet, setImageSet] = useState();
+  const dispatch = useDispatch();
+  const [addRequestStatus, setAddRequestStatus] = useState("idle");
   const [imageUrl, setImageUrl] = useState();
+  const { TextArea } = Input;
 
-  const [inputData, setInputData] = useState(() => {
-    return {
-      artist_name: "",
-      artist_title: "",
-      artist_FUI: "",
-      artist_rating: null,
-      artist_status: false,
-      artist_description: "",
-      artist_releaseDate: null,
-      artist_profileImage: null,
-    };
+  const [inputData, setInputData] = useState({
+    artist_name: "",
+    artist_title: "",
+    artist_FUI: "",
+    artist_rating: null,
+    artist_status: false,
+    artist_description: "",
+    artist_releaseDate: null,
+    artist_profileImage: null,
   });
 
-  const notify = (type, msg) => {
-    if (type === "success") toast.success(msg);
-    if (type === "error") toast.error(msg);
-  };
+  useEffect(() => {
+    setInputData({
+      artist_name: props.artist?.artist_name,
+      artist_title: props.artist?.artist_title,
+      artist_FUI: props.artist?.artist_FUI,
+      artist_rating: props.artist?.artist_rating,
+      artist_status: props.artist?.artist_status,
+      artist_description: props.artist?.artist_description,
+      artist_releaseDate: props.artist?.artist_releaseDate,
+      artist_profileImage: props.artist?.artist_profileImage,
+    });
+    setImageUrl(props.artist?.artist_profileImage);
+  }, [props?.artist]);
 
   function handleChange(event) {
     const { name, value, type, checked } = event.target;
@@ -49,12 +59,23 @@ export default function ArtistForm(props) {
       artist_releaseDate: null,
       artist_profileImage: null,
     });
-    setImageSet(false);
+    setImageUrl(null);
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(inputData);
+    try {
+      setAddRequestStatus("pending");
+      props.artist.id
+        ? dispatch(updateArtist({ ...inputData, id: props.artist.id })).unwrap()
+        : dispatch(addNewArtist(inputData)).unwrap();
+    } catch (err) {
+      setAddRequestStatus("failed");
+    } finally {
+      setAddRequestStatus("idle");
+      props.closeModal();
+      cleanUp();
+    }
     // const url = "https://music-service-vdzflryflq-ew.a.run.app/webApp/artist";
 
     // const formData = new FormData();
@@ -82,6 +103,16 @@ export default function ArtistForm(props) {
     //     props.closeModal();
     //     cleanUp();
     //   });
+  }
+
+  function handleImageUpload(event) {
+    setImageUrl(URL.createObjectURL(event.target.files[0]));
+    setInputData((prevInputData) => {
+      return {
+        ...prevInputData,
+        artist_profileImage: event.target.files[0],
+      };
+    });
   }
 
   return (
@@ -185,13 +216,12 @@ export default function ArtistForm(props) {
       <div className="form-item upload">
         <span>Profile Picture</span>
         <div className="image_upload_preview">
-          {imageSet ? (
+          {imageUrl ? (
             <Image
               width={100}
               height={100}
               src={imageUrl}
-              preview={false}
-              onClick={() => setImageSet(false)}
+              preview={true}
               style={{ borderRadius: "4px" }}
             />
           ) : (
@@ -216,14 +246,7 @@ export default function ArtistForm(props) {
           id="imgFiles"
           style={{ visibility: "hidden" }}
           type="file"
-          onChange={(event) => {
-            setImageSet(true);
-            setImageUrl(URL.createObjectURL(event.target.files[0]));
-            setInputData((prevInputData) => ({
-              ...prevInputData,
-              artist_profileImage: event.target.files[0],
-            }));
-          }}
+          onChange={(event) => handleImageUpload(event)}
         />
       </div>
 
